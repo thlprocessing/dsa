@@ -120,3 +120,8 @@ echo $solution->upperBound([1, 2, 4, 4, 7], 4) . "\n";      # Output: 4
 echo $solution->upperBound([1, 2, 4, 4, 7], 3) . "\n";      # Output: 2
 echo $solution->upperBound([1, 2, 4, 4, 7], 0) . "\n";      # Output: 0
 echo $solution->upperBound([1, 2, 4, 4, 7], 8) . "\n";      # Output: 5
+
+$data  = [0, 1, 1, 0, 0, 1, 0];
+$index =  $solution->upperBound([0, 5, 10, 15, 20, 25, 30], 12) . "\n";
+echo $index;
+echo $data[(int)($index -1)] . "\n";
