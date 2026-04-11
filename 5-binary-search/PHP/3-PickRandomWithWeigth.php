@@ -17,11 +17,29 @@ class PickRandomWithWeigth {
 
     public $weightedArray;
 
+    public $totalSum = 0;
+
+    public $prefixSumArr = [];
+
     /**
      * @param Integer[] $w
      */
     function __construct($w) {
+
         $this->weightedArray = $w;
+
+        /**
+         * The main problem is here in inside pickIndex() would rebuild the whole prefix sum array every time
+         */
+        $arrLength      = count($this->weightedArray);
+        
+        for($i = 0; $i < $arrLength; $i++) {
+            $this->totalSum     += ($this->weightedArray[$i] ?? 0); 
+            $this->prefixSumArr[$i]   = ($this->weightedArray[$i] ?? 0) + ($this->prefixSumArr[$i -1] ?? 0); 
+        }
+
+        echo implode(",", $this->prefixSumArr) . "\n";
+
     }
   
     /**
@@ -29,20 +47,11 @@ class PickRandomWithWeigth {
      */
     function pickIndex() {
         
-        $arrLength      = count($this->weightedArray);
-        $prefixSumArr   = [];
-        $totalSum       = 0;
-        for($i = 0; $i < $arrLength; $i++) {
-            $totalSum         += ($this->weightedArray[$i] ?? 0); 
-            $prefixSumArr[$i] = ($this->weightedArray[$i] ?? 0) + ($prefixSumArr[$i -1] ?? 0); 
-        }
-
-        echo implode(",", $prefixSumArr) . "\n";
-
-        $randInt = rand(1, $totalSum);
+        
+        $randInt = rand(1, $this->totalSum);
 
         $binarySearch = new BinarySearch();
-        $pIndex =  $binarySearch->lowerBound($prefixSumArr, $randInt);
+        $pIndex =  $binarySearch->lowerBound($this->prefixSumArr, $randInt);
 
         echo "randInt $randInt pIndex $pIndex \n";
 
@@ -139,9 +148,9 @@ class BinarySearch {
 
 $solution = new PickRandomWithWeigth([1,3]);
 
-echo $solution->pickIndex() . "\n";
-echo $solution->pickIndex() . "\n";
-echo $solution->pickIndex() . "\n";
-echo $solution->pickIndex() . "\n";
-echo $solution->pickIndex() . "\n";
+echo $solution->pickIndex() . "\n";     # Output: 1
+echo $solution->pickIndex() . "\n";     # Output: 1
+echo $solution->pickIndex() . "\n";     # Output: 1
+echo $solution->pickIndex() . "\n";     # Output: 0
+echo $solution->pickIndex() . "\n";     # Output: 1
 

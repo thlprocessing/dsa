@@ -75,7 +75,7 @@ class BinarySearch {
         while ($low <= $high) {
 
             # Recalculate $mid for each new boundary
-            $mid = floor($low + ($high - $low) / 2);        # Round down: 0.99 ~ 0.00
+            $mid = (int)($low + ($high - $low) / 2);        # Round down: 0.99 ~ 0.00
 
             # Divide
             if (isset($numbs[$mid]) && $target < $numbs[$mid]) {

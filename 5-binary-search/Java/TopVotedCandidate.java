@@ -4,9 +4,27 @@ class TopVotedCandidate {
 
     int[] times;
 
+    int [] leadingCandidates;
+
     public TopVotedCandidate(int[] persons, int[] times) {
         this.persons = persons;
         this.times   = times;
+        
+        int arrLength = persons.length;
+        this.leadingCandidates  = new int[arrLength];
+        int [] voteCounter = new int[arrLength];
+        int currentLeader = 0;
+
+        for(int i = 0; i < arrLength; i++) {
+            int person = persons[i];
+            voteCounter[person]++;
+
+            if(voteCounter[currentLeader] <= voteCounter[person]) {
+                currentLeader = person;
+            }
+
+            this.leadingCandidates[i] = currentLeader;
+        }
     }
 
     public int upperBound(int[] numbs, int target) {
@@ -36,7 +54,7 @@ class TopVotedCandidate {
 
     public int q(int t) {
         int rightMost = this.upperBound(this.times, t);
-        return this.persons[rightMost-1];
+        return this.leadingCandidates[rightMost-1];
     }
 
     public static void main(String[] var0) {

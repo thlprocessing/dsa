@@ -11,6 +11,12 @@ public class PickRandomWithWeigth
     */
     public int[] weightedArray;
 
+    public Random rand;
+
+    public int[] prefixSumArr;
+
+    public int totalSum;
+
     /**
      * 
      * @param w
@@ -18,6 +24,22 @@ public class PickRandomWithWeigth
     public PickRandomWithWeigth(int[] w)
     {
         this.weightedArray = w;
+
+        this.rand = new Random();
+
+        int arrLength                = this.weightedArray.length;
+        this.prefixSumArr            = new int[arrLength];;
+        this.totalSum                = 0;
+
+        for(int i = 0; i < arrLength; i++) {
+            totalSum         += (this.weightedArray[i]); 
+            
+            if (i == 0) {
+                this.prefixSumArr[i] = this.weightedArray[i];
+            } else {
+                this.prefixSumArr[i] = this.prefixSumArr[i - 1] + this.weightedArray[i];
+            }
+        }
     }
     
     /**
@@ -25,26 +47,12 @@ public class PickRandomWithWeigth
      * @return
      */
     public int pickIndex() {
-        int arrLength               = this.weightedArray.length;
-        int[] prefixSumArr          = new int[arrLength];;
-        int totalSum                = 0;
-        for(int i = 0; i < arrLength; i++) {
-            totalSum         += (this.weightedArray[i]); 
-            
-            if (i == 0) {
-                prefixSumArr[i] = this.weightedArray[i];
-            } else {
-                prefixSumArr[i] = prefixSumArr[i - 1] + this.weightedArray[i];
-            }
-        }
-
+      
         
-        
-        Random rand = new Random();
-        int randInt = rand.nextInt(totalSum) + 1;
+        int randInt = this.rand.nextInt(this.totalSum) + 1;
 
         BinarySearch binarySearch = new BinarySearch();
-        int pIndex =  binarySearch.lowerBound(prefixSumArr, randInt);
+        int pIndex =  binarySearch.lowerBound(this.prefixSumArr, randInt);
 
         System.out.println("randInt " + randInt +  " pIndex " + pIndex);
 

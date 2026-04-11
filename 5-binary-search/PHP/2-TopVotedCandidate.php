@@ -10,12 +10,38 @@ class TopVotedCandidate
     public $times;
 
     /**
+     * @var
+     */
+    public $leadingCandidates = [];
+
+    /**
      * @param Integer[] $persons
      * @param Integer[] $times
      */
     function __construct($persons, $times) {
         $this->persons = $persons;
         $this->times = $times;
+
+        /**
+         * PHP Fatal error: Allowed memory size of 104857600 bytes exhausted (tried to allocate 67108872 bytes)
+         * The memory error happens because q($t) rebuilds and appends to $this->leadingCandidates every time calling q.
+         * In the test, q() is called 6 times, so the array keeps growing again and again instead of being built once.
+         * On LeetCode, q() can be called many times, so memory blows up.
+         *
+         */
+        $voteCounter = [];
+        $currentLeader = 0;
+
+        foreach ($this->persons as $person) {
+
+            $voteCounter[$person] = isset($voteCounter[$person]) ? ($voteCounter[$person] + 1) : 1;
+
+            if($voteCounter[$currentLeader] <= $voteCounter[$person]) {
+                $currentLeader = $person;
+            }
+
+            $this->leadingCandidates[] = $currentLeader;
+        }
     }
 
     public function upperBound($numbs, $target) {
@@ -48,8 +74,9 @@ class TopVotedCandidate
      * @return Integer
      */
     function q($t) {
+
         $rightMostNumber = $this->upperBound($this->times, $t);
-        return $this->persons[(int)($rightMostNumber -1)];
+        return $this->leadingCandidates[(int)($rightMostNumber -1)];
     }
 }
 
