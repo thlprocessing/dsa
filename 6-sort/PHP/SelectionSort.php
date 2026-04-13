@@ -16,11 +16,11 @@ class SelectionSort
 
         for ($i = 0; $i < count($numbs); $i++) {
 
-            $min_index = $i;
+            $min_index = $current_index;
 
-            for ($j = $i + 1; $j < count($numbs); $j++) {
+            for ($j = $min_index + 1; $j < count($numbs); $j++) {
 
-                if ($numbs[$j] < $numbs[$i]) {
+                if ($numbs[$j] < $numbs[$min_index]) {
                     $min_index = $j;
                 }
             }

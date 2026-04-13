@@ -1,62 +1,58 @@
 <?php
 
 /**
- * Data you have: You have n boxes, say box 1, box 2,...box n. Each box has some weight, say weightOfBox1, weightOfBox2...weightOfBoxN.
- * Problem: Pick a box
- * Condition: How often a box should be picked from the rest (ie, probability) must be proportional to its weight compared to others.
- * Hint: Apply randomization to weights, by ranging randomization from nothing (0) to all weights (sum of all weights).
+ * https://leetcode.com/problems/koko-eating-bananas/description/
+ * Work in progress
  */
 
-/**
- * Given an array w of positive integers, where w[i] describe the weigth of index i, write a function pickIndex() which randomly pick an index in proportion with it weigth
- * https://leetcode.com/problems/find-the-longest-valid-obstacle-course-at-each-position/description/
- */
+class MinEatingBoundary {
 
-class PickRandomWithWeigth {
+    
+    public $binarySearch;
 
-    public $weightedArray;
-
-    public $totalSum = 0;
-
-    public $prefixSumArr = [];
-
-    /**
-     * @param Integer[] $w
-     */
-    function __construct($w) {
-
-        $this->weightedArray = $w;
-
-        /**
-         * The main problem is here in inside pickIndex() would rebuild the whole prefix sum array every time
-         */
-        $arrLength      = count($this->weightedArray);
-        
-        for($i = 0; $i < $arrLength; $i++) {
-            $this->totalSum     += ($this->weightedArray[$i] ?? 0); 
-            $this->prefixSumArr[$i]   = ($this->weightedArray[$i] ?? 0) + ($this->prefixSumArr[$i -1] ?? 0); 
-        }
-
-        echo implode(",", $this->prefixSumArr) . "\n";
-
+    function __construct()
+    {
+        $this->binarySearch = new BinarySearch();
     }
-  
+
     /**
-     * @return Integer
+     * @param Integer[] $obstacles
+     * @return Integer[]
      */
-    function pickIndex() {
+    function minEatingSpeed($piles, $h) {
+
+        $arrLength  = count($piles); 
+        $low        = 1;
+        $high       = 0;
+
+        for($i = 0; $i < $arrLength; $i++) {
+            if($piles[$i] > $high) {
+                $high = $piles[$i];
+            }
+        }
         
+        while($low < $high) {
+
+            $mid = floor($low + ($high - $low) / 2);
+
+            $totalHour = 0;
+
+            for($i = 0; $i < $arrLength; $i++) {
+                $totalHour += ceil($piles[$i] / $mid);
+            }   
+
+            if($totalHour <= $h) {      # max_boundary works(eating_fast) => reduced max_boundary
+                $high = $mid;           
+            } else {
+                $low  = $mid + 1;       # min_boundary works(eating_slow) => increase min_boundary
+            }
+        }
         
-        $randInt = rand(1, $this->totalSum);
+        return $low;
 
-        $binarySearch = new BinarySearch();
-        $pIndex =  $binarySearch->lowerBound($this->prefixSumArr, $randInt);
-
-        echo "randInt $randInt pIndex $pIndex \n";
-
-        return $pIndex;
     }
 }
+
 
 class BinarySearch {
 
@@ -129,7 +125,7 @@ class BinarySearch {
         while ($low <= $high) {
 
             # Recalculate $mid for each new boundary
-            $mid = floor($low + ($high - $low) / 2);        # Round down: 0.99 ~ 0.00
+            $mid = (int)($low + ($high - $low) / 2);        # Round down: 0.99 ~ 0.00
 
             # Divide
             if (isset($numbs[$mid]) && $target < $numbs[$mid]) {
@@ -144,12 +140,9 @@ class BinarySearch {
     }
 }
 
+$solution = new MinEatingBoundary();
 
-$solution = new PickRandomWithWeigth([1,3]);
 
-echo $solution->pickIndex() . "\n";     # Output: 1
-echo $solution->pickIndex() . "\n";     # Output: 1
-echo $solution->pickIndex() . "\n";     # Output: 1
-echo $solution->pickIndex() . "\n";     # Output: 0
-echo $solution->pickIndex() . "\n";     # Output: 1
-
+echo $solution->minEatingSpeed([3,6,7,11], 8)       . "\n";      # Output: 4
+echo $solution->minEatingSpeed([30,11,23,4,20], 5)  . "\n";      # Output: 30
+echo $solution->minEatingSpeed([30,11,23,4,20], 6)  . "\n";      # Output: 23
