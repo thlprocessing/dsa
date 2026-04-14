@@ -4,8 +4,8 @@ class QuickSort {
 
     public function sortArray(&$numbs)
     {
-        $n = count($numbs);
-        $this->quickShort($numbs, 0, $n - 1);
+        $n = count($numbs) - 1;
+        $this->quickShort($numbs, 0, $n);
     }
 
     /**
@@ -15,22 +15,29 @@ class QuickSort {
      */
     function quickShort(&$numbs, $start, $end)
     {
+
+        echo "start >= end : $start >= $end arrayLength " . (count($numbs)) . "\n";
+
         if ($start >= $end) {
             return;
         }
 
-        $randomIndex = $end;
-        $randomValue = $numbs[$randomIndex];
+        $randomPivotK = rand($start, $end);
+        $randomPivotValueK = $numbs[$randomPivotK];
 
-        echo "Quick sort: (s,e,r) $start $end - randomIndex $randomIndex $randomValue \n";
+        echo "Quick sort: start:  $start | end: $end | randomPivotK $randomPivotK randomPivotValueK $randomPivotValueK \n";
 
         $currentLeft = $start;
 
         for($i = $start; $i <= $end; $i++) {
-            if($numbs[$i] < $randomValue) {
+            if($numbs[$i] < $randomPivotValueK) {
+
+                $numbI = $numbs[$i];
+                echo  "currentLeft: $currentLeft | numbI: $numbI  | randomPivotValueK: $randomPivotValueK \n";
+
                 $this->swap($numbs, $currentLeft, $i);
-                echo  "currentLeft: $currentLeft - i $i  | pivot $randomValue \n";
-                echo implode(",", $numbs) . "\n";
+                
+                echo "currentLeft: " . implode(",", $numbs) . "\n";
                 $currentLeft++;
             }
         }
@@ -39,18 +46,23 @@ class QuickSort {
 
         $currentRight = $end;
         for($j = $end; $j >= $start; $j--) {
-            if($numbs[$j] > $randomValue) {
+            if($numbs[$j] > $randomPivotValueK) {
+
+                $numbJ = $numbs[$j];
+                echo  "currentRight: $currentRight | numbJ: $numbJ  | randomPivotValueK: $randomPivotValueK \n";
+
                 $this->swap($numbs, $currentRight, $j);
-                echo  "currentRight $currentRight - j $j | pivot $randomValue \n";
-                echo implode(",", $numbs) . "\n";
+            
+                echo "currentRight: " . implode(",", $numbs) . "\n";
+
                 $currentRight--;
             }
         }
-        echo "start $start, currentLeft $currentLeft \n";
-        $this->quickShort($numbs, $start, $currentLeft - 1);
-        echo "currentRight $currentRight, end $end \n";
-        $this->quickShort($numbs, $currentRight + 1, $end);
 
+        echo "start $start randomPivotK $randomPivotK | currentLeft - 1: " . ($currentLeft - 1) . " \n";
+        $this->quickShort($numbs, $start, $currentLeft - 1);
+        echo "end $end randomPivotK $randomPivotK| currentRight + 1 " . $currentRight + 1 . "\n";
+        $this->quickShort($numbs, $currentRight + 1, $end);
     }
 
     public function swap(&$numbs, $i, $j)
@@ -60,59 +72,6 @@ class QuickSort {
         $numbs[$j] = $temp;
     }
 
-
-    function sortArray2(&$arr, $low, $high) {
-
-        // Get the partition index
-        $this->quickSort2($arr, $low, $high);
-
-    }
-
-    function quickSort2(&$arr, $low, $high) {
-
-        if ($low < $high) {
-
-            $pivot = $arr[$high];
-            $i = $low - 1;
-
-            echo "Quick sort: (s,e,r) $low $high - $high pivot $pivot \n";
-
-            for ($j = $low; $j < $high; $j++) {
-                if ($arr[$j] <= $pivot) {
-
-                    echo  "low $low - j $j i $i | pivot $pivot \n";
-                    $i++;
-                    echo  "low $low - j $j i++ $i | pivot $pivot \n";
-                    // Swap arr[i] and arr[j]
-                    $temp = $arr[$i];
-                    $arr[$i] = $arr[$j];
-                    $arr[$j] = $temp;
-
-                    echo implode(",", $arr) . "\n";
-                }
-            }
-
-            /**
-             * Why the Final Swap?
-             * - After the loop, the pivot (arr[high]) is still at the end of the subarray.
-             * - The index i points to the last element less than or equal to the pivot.
-             */
-            // Swap arr[i + 1] and arr[high] (the pivot)
-            $temp = $arr[$i + 1];
-            $arr[$i + 1] = $arr[$high];
-            $arr[$high] = $temp;
-
-            echo implode(",", $arr) . "\n";
-
-            $pivot_idx = $i + 1;
-
-
-            // Recursively sort elements before and after partition
-            $this->quickSort2($arr, $low, $pivot_idx - 1);
-            $this->quickSort2($arr, $pivot_idx + 1, $high);
-        }
-
-    }
 
 
 }
@@ -129,16 +88,7 @@ $solution = new QuickSort();
 
 echo "Quick Sort \n";
 //$numbs = [5,2,3,1];
-$numbs = [10, 7, 8, 9, 1, 5];
-echo implode(",", $numbs) . "\n";
+$numbs = [30, 80, 10, 90, 70, 50, 40];
+echo "before sort: " . implode(",", $numbs) . "\n";
 $solution->sortArray($numbs);
-echo implode(",", $numbs) . "\n";
-
-// Example usage:
-$data = [10, 7, 8, 9, 1, 5];
-$n = count($data);
-echo implode(",", $data) . "\n";
-$solution->sortArray2($data, 0, $n - 1);
-
-echo "Sorted array: \n";
-echo implode(",", $data) . "\n";
+echo "after sort: " . implode(",", $numbs) . "\n";
