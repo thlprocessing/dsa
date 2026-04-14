@@ -29,6 +29,7 @@ class QuickSort {
 
         $currentLeft = $start;
 
+        # push all elements < pivot_k to the left -> then sort them  [start, latest_current_left]
         for($i = $start; $i <= $end; $i++) {
             if($numbs[$i] < $randomPivotValueK) {
 
@@ -43,7 +44,7 @@ class QuickSort {
         }
 
 
-
+        # push all elements > pivot_k to the right -> then sort them [latest_current_right, end]
         $currentRight = $end;
         for($j = $end; $j >= $start; $j--) {
             if($numbs[$j] > $randomPivotValueK) {
@@ -60,8 +61,10 @@ class QuickSort {
         }
 
         echo "start $start randomPivotK $randomPivotK | currentLeft - 1: " . ($currentLeft - 1) . " \n";
-        $this->quickShort($numbs, $start, $currentLeft - 1);
-        echo "end $end randomPivotK $randomPivotK| currentRight + 1 " . $currentRight + 1 . "\n";
+        # starting quicksort from start to latest_current_left sorted
+        $this->quickShort($numbs, $start, $currentLeft - 1);    # rollback one for lastest while exit
+        echo "end $end randomPivotK $randomPivotK| currentRight + 1 " . $currentRight + 1 . "\n"; # forwardback one for lastest while exit
+        # starting quicksort from latest_current_right sorted to the end
         $this->quickShort($numbs, $currentRight + 1, $end);
     }
 
