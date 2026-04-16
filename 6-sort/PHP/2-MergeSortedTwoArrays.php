@@ -4,7 +4,7 @@
  * Merge sorted Two Arrays
  * https://leetcode.com/problems/merge-sorted-array/description/
  */
-class MergeShortedArray {
+class MergeShortedTwoArrays {
 
     /**
      * 
