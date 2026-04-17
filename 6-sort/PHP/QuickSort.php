@@ -2,6 +2,12 @@
 
 class QuickSort {
 
+    public $asc = true;
+
+    public function __construct($asc = true) {
+        $this->asc = $asc;
+    }
+
     public function sortArray(&$numbs)
     {
         $n = count($numbs) - 1;
@@ -31,7 +37,17 @@ class QuickSort {
 
         # push all elements < pivot_k to the left -> then sort them  [start, latest_current_left]
         for($i = $start; $i <= $end; $i++) {
-            if($numbs[$i] < $randomPivotValueK) {
+
+            if($this->asc && ($numbs[$i] < $randomPivotValueK)) {
+
+                $numbI = $numbs[$i];
+                echo  "currentLeft: $currentLeft | numbI: $numbI  | randomPivotValueK: $randomPivotValueK \n";
+
+                $this->swap($numbs, $currentLeft, $i);
+                
+                echo "currentLeft: " . implode(",", $numbs) . "\n";
+                $currentLeft++;
+            } else if(!$this->asc && ($numbs[$i] > $randomPivotValueK)) {
 
                 $numbI = $numbs[$i];
                 echo  "currentLeft: $currentLeft | numbI: $numbI  | randomPivotValueK: $randomPivotValueK \n";
@@ -47,8 +63,17 @@ class QuickSort {
         # push all elements > pivot_k to the right -> then sort them [latest_current_right, end]
         $currentRight = $end;
         for($j = $end; $j >= $start; $j--) {
-            if($numbs[$j] > $randomPivotValueK) {
+            if($this->asc && ($numbs[$j] > $randomPivotValueK)) {
 
+                $numbJ = $numbs[$j];
+                echo  "currentRight: $currentRight | numbJ: $numbJ  | randomPivotValueK: $randomPivotValueK \n";
+
+                $this->swap($numbs, $currentRight, $j);
+            
+                echo "currentRight: " . implode(",", $numbs) . "\n";
+
+                $currentRight--;
+            } else if(!$this->asc && ($numbs[$j] < $randomPivotValueK)) { 
                 $numbJ = $numbs[$j];
                 echo  "currentRight: $currentRight | numbJ: $numbJ  | randomPivotValueK: $randomPivotValueK \n";
 
