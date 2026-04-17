@@ -51,32 +51,38 @@ class MergeShortedTwoLists {
      * @param ListNode $list2
      * @return ListNode
      */
-    function mergeTwoLists(ListNode $list1, ListNode $list2) {
+    function mergeTwoLists($list1, $list2) {
 
         // clone list1 [0, m] and list2 [0,n]
 
         $this->appendList($list1, $list2);
-        $this->displayList($list1);
         
-        $this->mergeSortList->mergeSortList($list1);
+        return $this->mergeSortList->mergeSortList($list1);
 
     }
 
-    public function appendList(ListNode $list1, ListNode $list2) {
+    public function appendList(&$list1, $list2)
+    {
 
-        $currentNode = $list1;
+        if($list1) {
+
+            $currentNode = $list1;
     
-        while($currentNode) {
+            while($currentNode) {
 
-            // append list 2
-            if($currentNode->next === null && $list2)
-            {
-                $currentNode->next = $list2;
-                return;
+                // append list 2
+                if($currentNode->next === null && $list2)
+                {
+                    $currentNode->next = $list2;
+                    return;
+                }
+
+                $currentNode = $currentNode->next;
             }
-
-            $currentNode = $currentNode->next;
+        } else {
+            $list1 = $list2;
         }
+        
     }
     
     public function displayList(ListNode $list) {
@@ -91,7 +97,19 @@ class MergeShortedTwoLists {
         }
     }
 
+    public function toArrayList($list) {
+
+        $array = [];
+        $currentNode = $list;
     
+        while($currentNode) {
+
+            $array[] = $currentNode->val;
+            $currentNode = $currentNode->next;
+        }
+
+        return $array;
+    }
 
 
 }
@@ -154,7 +172,7 @@ class MergeSortList
                     $currentNodeLeft        = $currentNodeLeft->next;
                 }
 
-                echo "currentNodeLeft value: " . $currentNodeLeft->val . "\n";  
+                //echo "currentNodeLeft value: " . $currentNodeLeft->val . "\n";  
             } 
             // slice right
             else {       
@@ -167,7 +185,7 @@ class MergeSortList
                     $currentNodeRight       = $currentNodeRight->next;
                 }
 
-                echo "currentNodeRight value: " . $currentNodeRight->val . "\n";
+                //echo "currentNodeRight value: " . $currentNodeRight->val . "\n";
             }            
             
             $currentNode = $currentNode->next;
@@ -180,76 +198,48 @@ class MergeSortList
         $lowArr  = $this->mergeSortListRecv($leftList);
         $highArr = $this->mergeSortListRecv($rightList);
         
-        echo "leftList  \n";
-        var_dump($leftList);
-        echo "rightList \n";
-        var_dump($rightList);
+        // echo "leftList  \n";
+        // var_dump($leftList);
+        // echo "rightList \n";
+        // var_dump($rightList);
 
-        $mergedArraySorted = $this->mergeSortTwoList($leftList, $rightList);
-        echo "mergedArraySorted \n";
-        var_dump($mergedArraySorted);
-
+        $mergedArraySorted = $this->mergeSortTwoList($lowArr, $highArr);
+        
         return $mergedArraySorted;
     }
 
 
     public function mergeSortTwoList($leftList, $rightList)
     {
-
-        echo "mergeShortTwoList \n";
-
         $mergeSortedList    = null;
         $currentNode        = null;
         $i = 0;
         while($leftList && $rightList) {
 
-            echo "leftList->val: " . $leftList->val . " rightList->val: " . $rightList->val . "\n";
-
-            // $i++;
-            // if ($i == 10) {
-            //     var_dump($leftList);
-            //     var_dump($rightList);
-            //     exit;
-            // }
-
             if($leftList->val < $rightList->val) {
-                $newNode                = new ListNode();
-                $newNode->val           = $leftList->val;
-
+                
                 if($mergeSortedList === null) {
-                    $mergeSortedList        = $newNode;
+                    $mergeSortedList        = $leftList;
                     $currentNode            = $mergeSortedList;
                     $leftList               = $leftList->next;
                 } else {
-                    $currentNode->next      = $newNode;
+                    $currentNode->next      = $leftList;
                     $currentNode            = $currentNode->next;
                     $leftList              = $leftList->next;
                 }
             } else {
-                $newNode                = new ListNode();
-                $newNode->val           = $rightList->val;
-
+                
                 if($mergeSortedList === null) {
-                    $mergeSortedList        = $newNode;
+                    $mergeSortedList        = $rightList;
                     $currentNode            = $mergeSortedList;
                     $rightList               = $rightList->next;
                 } else {
-                    $currentNode->next      = $newNode;
+                    $currentNode->next      = $rightList;
                     $currentNode            = $currentNode->next;
                     $rightList              = $rightList->next;
                 }
             }
         }
-
-        
-        //$currentNode = null;
-        
-        //$currentNode = $mergeSortedList;
-
-        echo "currentNode \n";
-        var_dump($currentNode);
-        echo "mergeSortedList 249 \n";
-        var_dump($mergeSortedList);
 
         while($leftList !== null) {
             $currentNode->next     = $leftList;
@@ -262,9 +252,6 @@ class MergeSortList
             $currentNode            = $currentNode->next;
             $rightList              = $rightList->next;
         }
-        
-        echo "mergeSortedList 264 \n";
-        var_dump($mergeSortedList);
 
         return $mergeSortedList;
 
@@ -278,7 +265,7 @@ class MergeSortList
         // Traverse both lists and attach the smaller value
         while ($leftList !== null && $rightList !== null) {
 
-            echo "leftList->val: " . $leftList->val . " rightList->val: " . $rightList->val . "\n";
+            //echo "leftList->val: " . $leftList->val . " rightList->val: " . $rightList->val . "\n";
 
             if ($leftList->val < $rightList->val) {
                 $currentNode->next = $leftList;
@@ -290,8 +277,8 @@ class MergeSortList
             $currentNode = $currentNode->next;
         }
 
-        echo "mergeSortedList 289 \n";
-        var_dump($mergeSortedList);
+        //echo "mergeSortedList 289 \n";
+        //var_dump($mergeSortedList);
 
         // Append remaining nodes from either list
         if ($leftList !== null) {
@@ -300,16 +287,16 @@ class MergeSortList
             $currentNode->next = $rightList;
         }
 
-        echo "currentNode \n";
-        var_dump($currentNode);
-        echo "mergeSortedList 297 \n";
-        var_dump($mergeSortedList);
+        //echo "currentNode \n";
+        //var_dump($currentNode);
+        //echo "mergeSortedList 297 \n";
+        //var_dump($mergeSortedList);
 
         // Return the head of the merged list, skipping the dummy node
         return $mergeSortedList->next;
     }
 
-    public function getListLength(ListNode $list) {
+    public function getListLength($list) {
 
         $length = 0;
         $currentNode = $list;
@@ -357,4 +344,40 @@ $solution = new MergeShortedTwoLists();
 $merged = $solution->mergeTwoLists($node1, $mode1);
 
 var_dump($merged);
+
+
+
+
+$mode4 = new ListNode();
+$mode4->val = 3;
+
+
+$merged2 = $solution->mergeTwoLists(null, $mode4);
+
+var_dump($merged2);
+
+
+
+
+$node4 = new ListNode();
+$node4->val = 5;
+
+$mode5 = new ListNode();
+$mode5->val = 1;
+
+$mode6 = new ListNode();
+$mode6->val = 2;
+
+$mode7 = new ListNode();
+$mode7->val = 4;
+
+$mode5->next = $mode6;
+$mode6->next = $mode7;
+
+
+$merged3 = $solution->mergeTwoLists($node4, $mode5);
+
+var_dump($merged3);
+
+
 
