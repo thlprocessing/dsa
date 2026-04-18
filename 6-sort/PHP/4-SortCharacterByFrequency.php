@@ -8,11 +8,11 @@
 
 class SortCharacterByFrequency {
 
-    public $quickShort;
+    public $quickSort;
 
     public function __construct() 
     {
-        $this->quickShort = new QuickSort($asc = true);
+        $this->quickSort = new QuickSort($asc = false);
     }
 
     /**
@@ -21,22 +21,22 @@ class SortCharacterByFrequency {
      */
     function frequencySort($s) {
 
+        // Use your QuickSort which is initialized with $asc = false (descending)
+        
+        // 1. Get frequency count (returns ASCII value => frequency)
         $stringToArray = str_split($s);
-
         $charToASCIIValueArray = $this->chartToASCIIValueArray($stringToArray);
         
+        $mapCounting = $this->frequencyMapCounting($charToASCIIValueArray);
         
-        //$mapCounting = $this->frequencyMapCounting($charToASCIIValueArray);
+        // 2. Sort the array in descending order while maintaining index association
+        $this->quickSort->sortArray($mapCounting);
         
-        echo "before sort: " . implode(",", $charToASCIIValueArray) . "\n";
-        $this->quickShort->sortArray($charToASCIIValueArray);
-
+        // 3. Reconstruct the string
+        return $this->ASCIIValueToString($mapCounting);
         
-        echo "after sort: " . implode(",", $charToASCIIValueArray) . "\n";
-        //$unMapCounting = $this->frequencyUnMapCounting($mapCounting);
-
-        return $this->ASCIIValueToString($charToASCIIValueArray);
     }
+
 
     public function frequencyMapCounting($array)
     {
@@ -45,25 +45,8 @@ class SortCharacterByFrequency {
         for($i = 0; $i < $arrLength; $i++) {
             $mapCounting[$array[$i]] = !isset($mapCounting[$array[$i]]) ? 1 : ($mapCounting[$array[$i]] + 1);
         }
-        echo "map counting:  \n";
-        var_dump($mapCounting);
         
         return $mapCounting;
-    }
-
-    public function frequencyUnMapCounting($mapCounting)
-    {
-        $unMapCounting = [];
-
-        // foreach($mapCounting as $index => $key) {
-        //     for($counting = 0; $counting < $array[0]; $counting++) {
-        //         $unMapCounting[] = $array[1];
-        //     }
-        // }            
-        
-        // echo "unMapCounting:  \n";
-        // var_dump($unMapCounting);
-        return $unMapCounting;
     }
 
     /**
@@ -95,16 +78,16 @@ class SortCharacterByFrequency {
         return $ASCIIValueToCharArray;
     }
 
-    public function ASCIIValueToString($stringArray) {
+    public function ASCIIValueToString($asciiArray) {
 
-        $ASCIIValueToCharArray = "" ;
-
-        for($i = 0 ; $i < count($stringArray) ; $i++) {
-            //echo "i: $i | value: " . $stringArray[$i]  .  " | chr(stringArray[i]: " . chr($stringArray[$i]) . "\n";
-            $ASCIIValueToCharArray .= chr($stringArray[$i]);
+        $ASCIIValueToString = "" ;
+        foreach($asciiArray as $asciiKey => $counting) {
+            for($i = 0 ; $i < $counting ; $i++) {
+                $ASCIIValueToString .= chr($asciiKey);
+            }
         }
-
-        return $ASCIIValueToCharArray;
+        
+        return $ASCIIValueToString;
     }
 }
 
@@ -124,16 +107,33 @@ class QuickSort {
 
     public function sortArray(&$numbs)
     {
-        $n = count($numbs) - 1;
-        $this->quickShort($numbs, 0, $n);
+        if (empty($numbs)) {
+            return;
+        }
+
+        // To maintain index association, sort an array of keys
+        $keys = array_keys($numbs);
+        $n = count($keys) - 1;
+        
+        // Pass both keys and the original associative array to compare values
+        $this->quickSort($keys, $numbs, 0, $n);
+
+        // Rebuild the array using the newly sorted keys to maintain index association
+        $sortedArray = [];
+        foreach ($keys as $key) {
+            $sortedArray[$key] = $numbs[$key];
+        }
+        
+        $numbs = $sortedArray;
     }
 
     /**
-     * @param Integer[] $numbs
-     * @param Integer $target
-     * @return Integer
+     * @param array $keys
+     * @param array $numbs
+     * @param Integer $start
+     * @param Integer $end
      */
-    function quickShort(&$numbs, $start, $end)
+    function quickSort(&$keys, &$numbs, $start, $end)
     {
 
         if ($start >= $end) {
@@ -141,22 +141,25 @@ class QuickSort {
         }
 
         $randomPivotK = rand($start, $end);
-        $randomPivotValueK = $numbs[$randomPivotK];
-
+        // Get the pivot value from the original array using the pivot key
+        $randomPivotValueK = $numbs[$keys[$randomPivotK]];
      
         $currentLeft = $start;
 
         # push all elements < pivot_k to the left -> then sort them  [start, latest_current_left]
         for($i = $start; $i <= $end; $i++) {
+            
+            // Compare the value of the current key
+            $currentValue = $numbs[$keys[$i]];
 
-            if($this->asc && ($numbs[$i] < $randomPivotValueK)) {
+            if($this->asc && ($currentValue < $randomPivotValueK)) {
 
-                $this->swap($numbs, $currentLeft, $i);                
+                $this->swap($keys, $currentLeft, $i);                
                 $currentLeft++;
 
-            } else if(!$this->asc && ($numbs[$i] > $randomPivotValueK)) {
+            } else if(!$this->asc && ($currentValue > $randomPivotValueK)) {
 
-                $this->swap($numbs, $currentLeft, $i);                
+                $this->swap($keys, $currentLeft, $i);                
                 $currentLeft++;
             }
         }
@@ -165,15 +168,18 @@ class QuickSort {
         # push all elements > pivot_k to the right -> then sort them [latest_current_right, end]
         $currentRight = $end;
         for($j = $end; $j >= $start; $j--) {
-            if($this->asc && ($numbs[$j] > $randomPivotValueK)) {
+            
+            $currentValue = $numbs[$keys[$j]];
 
-                $this->swap($numbs, $currentRight, $j);
+            if($this->asc && ($currentValue > $randomPivotValueK)) {
+
+                $this->swap($keys, $currentRight, $j);
                 $currentRight--;
 
 
-            } else if(!$this->asc && ($numbs[$j] < $randomPivotValueK)) { 
+            } else if(!$this->asc && ($currentValue < $randomPivotValueK)) { 
                 
-                $this->swap($numbs, $currentRight, $j);
+                $this->swap($keys, $currentRight, $j);
                 $currentRight--;
 
             }
@@ -181,16 +187,16 @@ class QuickSort {
 
         
         # starting quicksort from start to latest_current_left sorted
-        $this->quickShort($numbs, $start, $currentLeft - 1);    # rollback one for lastest while exit        
+        $this->quickSort($keys, $numbs, $start, $currentLeft - 1);    # rollback one for lastest while exit        
         # starting quicksort from latest_current_right sorted to the end
-        $this->quickShort($numbs, $currentRight + 1, $end);
+        $this->quickSort($keys, $numbs, $currentRight + 1, $end);
     }
 
-    public function swap(&$numbs, $i, $j)
+    public function swap(&$keys, $i, $j)
     {
-        $temp = $numbs[$i];
-        $numbs[$i] = $numbs[$j];
-        $numbs[$j] = $temp;
+        $temp = $keys[$i];
+        $keys[$i] = $keys[$j];
+        $keys[$j] = $temp;
     }
 }
 
@@ -216,5 +222,3 @@ echo $sortCharacterByFrequency->frequencySort("tree") . "\n";
 echo $sortCharacterByFrequency->frequencySort("cccaaa") . "\n";
 
 echo $sortCharacterByFrequency->frequencySort("Aabb") . "\n";
-
-
