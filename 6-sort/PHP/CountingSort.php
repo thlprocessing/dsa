@@ -31,15 +31,16 @@ class CountingSort {
         }
 
         # Step 3: Put numbers in the correct order with stability
-        $ans = array_fill(0, count($numbs), 0);
+        $arr = array_fill(0, count($numbs), 0);
 
-        foreach (array_reverse($numbs) as $val) {
+        for ($i = count($numbs) - 1; $i >= 0; $i--) {
+            $val = $numbs[$i];
             $countingFreq[$val] -= 1;
-            $ans[$countingFreq[$val]] = $val;
+            $arr[$countingFreq[$val]] = $val;
         }
         
 
-        return $ans;
+        return $arr;
 
     }
 
@@ -49,4 +50,4 @@ $data = [1, 2, 3, 0, 6, 0, 1, 1, 3];
 $solution = new CountingSort();
 $result = $solution->countingSort($data);
 
-echo "counting sort: " . implode(",", $result) . "\n";
+echo "counting sort: " . implode(",", $result);
