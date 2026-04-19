@@ -2,38 +2,33 @@
 
 class CountingSort {
 
-    function countingSort(&$nums) {
-        if (empty($nums)) {
-            return $nums;
+    public function countingSort(&$numbs)
+    {
+        
+        $countingFreq = [];
+
+        // php array maintain insertion order for dynamic keys encountered
+        $maxValue = max($numbs);
+        // initialize count array with 0s to force correct order of indexes
+        $countingFreq = array_fill(0, $maxValue + 1, 0);
+
+        // counting frequencies
+        foreach($numbs as $numb) {
+            $countingFreq[$numb]++;
         }
-
-        $maxValue = max($nums);
-
-        echo "maxValue $maxValue \n";
-
-        // Initialize count array with 0s
-        $cnt = array_fill(0, $maxValue + 1, 0);
-
-        echo "before count: " . implode(",", $cnt) . "\n";
-
-        // Count frequencies
-        foreach ($nums as $num) {
-            $cnt[$num]++;
-        }
-
-        echo "after count: " . implode(",", $cnt) . "\n";
-
-        // Reconstruct the array
-        $j = 0;
-        foreach ($cnt as $val => $freq) {
-            echo "val $val freq $freq \n";
-            for ($i = 0; $i < $freq; $i++) {
-                $nums[$j] = $val;
-                $j++;
+        
+        $reindex = 0;
+        foreach($countingFreq as $numb => $freq) {
+            for($i = 0; $i < $freq; $i++) {
+                $numbs[$reindex++] = $numb;
             }
         }
-
-        return $nums;
     }
-    
+
 }
+
+$data = [1, 2, 3, 0, 6, 0, 1, 1, 3];
+$solution = new CountingSort();
+$solution->countingSort($data);
+
+echo "counting sort: " . implode(",", $data) . "\n";
