@@ -1,17 +1,10 @@
 <?php
 
-/**
- * Constraints:
- * 0 <= key, value <= 106
- * At most 10^4 calls will be made to put, get, and remove => total calls = rehasing 0.75% capacity
- */
-
-
-class HashMap {
+class HashSet {
 
     public $hashTable;
 
-    public function __construct(int $capacity = 100000) {
+    public function __construct(int $capacity = 10000) {
         $this->hashTable = array_fill(0, $capacity, []);
     }
 
@@ -19,7 +12,7 @@ class HashMap {
         return $key % count($this->hashTable);
     }
 
-    public function put($key, $value) {
+    public function add($key) {
 
         $hashCode = $this->getHashCode($key);
         
@@ -27,27 +20,27 @@ class HashMap {
         foreach($this->hashTable[$hashCode] as $index => $bucket) {
             # set to new value for same key
             if($key == $bucket[0]) {
-                $this->hashTable[$hashCode][$index] = [$key, $value];
+                $this->hashTable[$hashCode][$index] = [$key];
                 return;
             }
         }
 
         # otherwise insert
-        $this->hashTable[$hashCode][] = [$key, $value];
+        $this->hashTable[$hashCode][] = [$key];
     }
 
-    public function get($key)
+    public function contains($key)
     {
 
         $hashCode = $this->getHashCode($key);
 
         foreach($this->hashTable[$hashCode] as $index => $bucket) {
             if($key == $bucket[0]) {    
-                return $bucket[1];
+                return true;
             }
         }
 
-        return -1;
+        return false;
     }
 
     public function remove($key)
@@ -56,7 +49,7 @@ class HashMap {
 
         foreach($this->hashTable[$hashCode] as $index => $bucket) {
             if($key == $bucket[0]) {
-                unset($this->hashTable[$hashCode][$index]);         
+                $this->hashTable[$hashCode][$index] = null;         
             }
         }
     }
