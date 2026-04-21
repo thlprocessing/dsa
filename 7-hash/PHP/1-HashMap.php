@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * https://leetcode.com/problems/design-hashmap/description/
+ * 
+ * Time complexity: O(n)
+ * Space complexity: O(n)
+ * 
  * Constraints:
  * 0 <= key, value <= 106
  * At most 10^4 calls will be made to put, get, and remove => total calls = rehasing 0.75% capacity
@@ -42,7 +47,7 @@ class HashMap {
         $hashCode = $this->getHashCode($key);
 
         foreach($this->hashTable[$hashCode] as $index => $bucket) {
-            if($key == $bucket[0]) {    
+            if(isset($bucket[0]) && $key == $bucket[0]) {    
                 return $bucket[1];
             }
         }
@@ -55,7 +60,7 @@ class HashMap {
         $hashCode = $this->getHashCode($key);
 
         foreach($this->hashTable[$hashCode] as $index => $bucket) {
-            if($key == $bucket[0]) {
+            if(isset($bucket[0]) && $key == $bucket[0]) {
                 unset($this->hashTable[$hashCode][$index]);         
             }
         }

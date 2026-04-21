@@ -1,5 +1,17 @@
 <?php
 
+
+/**
+ * https://leetcode.com/problems/design-hashset/
+ * 
+ * Time complexity: O(n)
+ * Space complexity: O(n)
+ * 
+ * Constraints:
+ * 0 <= key <= 106
+ * At most 104 calls will be made to add, remove, and contains.
+ */
+
 class HashSet {
 
     public $hashTable;
@@ -19,7 +31,7 @@ class HashSet {
         # on collision -> update value
         foreach($this->hashTable[$hashCode] as $index => $bucket) {
             # set to new value for same key
-            if($key == $bucket[0]) {
+            if(isset($bucket[0]) && $key == $bucket[0]) {
                 $this->hashTable[$hashCode][$index] = [$key];
                 return;
             }
@@ -35,7 +47,7 @@ class HashSet {
         $hashCode = $this->getHashCode($key);
 
         foreach($this->hashTable[$hashCode] as $index => $bucket) {
-            if($key == $bucket[0]) {    
+            if(isset($bucket[0]) && $key == $bucket[0]) {    
                 return true;
             }
         }
