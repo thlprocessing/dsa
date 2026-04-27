@@ -27,7 +27,7 @@ class DFSTreeDiameter {
         if(!$root) {
             return 0;
         }
-        
+
         $this->findDiameter($root);
 
         return $this->maxDiameter;

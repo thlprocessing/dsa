@@ -2,7 +2,8 @@
 
 
 /**
- * https://leetcode.com/problems/binary-tree-level-order-traversal/
+ * 
+ * https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal
  *
  * Definition for a binary tree node.
  * class TreeNode {
@@ -17,7 +18,7 @@
  * }
  */
 
-class BFSLevelOrder
+class BFSZigzagLevelOrder
 {
     /**
      * @param TreeNode $root
@@ -34,16 +35,25 @@ class BFSLevelOrder
 
         $deque[]        = [$root, 0];
         $current_level  = -1;
-        $zigZag         = false;
 
         while(!empty($deque)) {
             [$visitedNode, $visitedNode_level] = array_shift($deque);
             
             if($visitedNode_level > $current_level) {
-                $current_level = $visitedNode_level;
+                
                 array_push($ans, [$visitedNode->val]);
+                $current_level = $visitedNode_level;
+
             } else {
-                array_push($ans[count($ans) - 1], $visitedNode->val);
+                
+                $zigZagByLevel = $current_level % 2 == 0;
+
+                if ($zigZagByLevel) {
+                    array_push($ans[count($ans) - 1], $visitedNode->val);
+                } else {
+                    array_unshift($ans[count($ans) - 1], $visitedNode->val);
+                }
+                
             }
             
             if($visitedNode->left) {
@@ -148,6 +158,6 @@ $tree = buildBinaryTree($input);
 
 //printLevelOrder($tree); // Output: [3,9,20,null,null,15,7]
 
-$solution = new BFSLevelOrder();
+$solution = new BFSZigzagLevelOrder();
 $ans = $solution->levelOrder($tree);
 var_dump($ans);
