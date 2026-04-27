@@ -21,7 +21,13 @@ class HashMap {
     }
 
     public function getHashCode($key) {
+
+        # Time Exceeded Limit
+        # Even with a larger capacity, if there are duplicate keys, the bucket chain grows and contains()/remove() become slow.
+        # Since this is a multiset and we allow duplicates, the bucket can have many entries for the same key. 
+        # The linear scan through nulled-out entries makes it O(n) per operation.
         return $key % count($this->hashTable);
+        
     }
 
     public function put($key, $value) {
