@@ -87,76 +87,75 @@ class TreeNode {
     }
 }
 
-/**
- * Build a binary tree from a level-order array
- *
- * @param array $arr Level-order array (null for missing nodes)
- * @return TreeNode|null Root of the binary tree
- */
-function buildBinaryTree(array $arr) {
-    if (empty($arr) || $arr[0] === null) {
-        return null; // Empty tree
+
+class BinaryTree {
+
+    function buildBinaryTree(array $arr) {
+        if (empty($arr) || $arr[0] === null) {
+            return null; // Empty tree
+        }
+
+        // Create root node
+        $root = new TreeNode($arr[0]);
+        $queue = [$root];
+        $i = 1;
+
+        // BFS construction
+        while (!empty($queue) && $i < count($arr)) {
+            $current = array_shift($queue);
+
+            // Left child
+            if ($i < count($arr) && $arr[$i] !== null) {
+                $current->left = new TreeNode($arr[$i]);
+                $queue[] = $current->left;
+            }
+            $i++;
+
+            // Right child
+            if ($i < count($arr) && $arr[$i] !== null) {
+                $current->right = new TreeNode($arr[$i]);
+                $queue[] = $current->right;
+            }
+            $i++;
+        }
+
+        return $root;
     }
 
-    // Create root node
-    $root = new TreeNode($arr[0]);
-    $queue = [$root];
-    $i = 1;
-
-    // BFS construction
-    while (!empty($queue) && $i < count($arr)) {
-        $current = array_shift($queue);
-
-        // Left child
-        if ($i < count($arr) && $arr[$i] !== null) {
-            $current->left = new TreeNode($arr[$i]);
-            $queue[] = $current->left;
+    
+    function printLevelOrder($root) {
+        if (!$root) {
+            echo "[]\n";
+            return;
         }
-        $i++;
-
-        // Right child
-        if ($i < count($arr) && $arr[$i] !== null) {
-            $current->right = new TreeNode($arr[$i]);
-            $queue[] = $current->right;
+        $queue = [$root];
+        $result = [];
+        while (!empty($queue)) {
+            $node = array_shift($queue);
+            if ($node) {
+                $result[] = $node->val;
+                $queue[] = $node->left;
+                $queue[] = $node->right;
+            } else {
+                $result[] = null;
+            }
         }
-        $i++;
+        
+        while (end($result) === null) {
+            array_pop($result);
+        }
+        echo implode(",", $result) . "\n";
     }
-
-    return $root;
 }
 
-/**
- * Helper: Print tree in level-order for verification
- */
-function printLevelOrder($root) {
-    if (!$root) {
-        echo "[]\n";
-        return;
-    }
-    $queue = [$root];
-    $result = [];
-    while (!empty($queue)) {
-        $node = array_shift($queue);
-        if ($node) {
-            $result[] = $node->val;
-            $queue[] = $node->left;
-            $queue[] = $node->right;
-        } else {
-            $result[] = null;
-        }
-    }
-    // Trim trailing nulls for clean output
-    while (end($result) === null) {
-        array_pop($result);
-    }
-    echo implode(",", $result) . "\n";
-}
 
-// Example usage:
+
+
+
 $input = [3, 9, 20, null, null, 15, 7];
-$tree = buildBinaryTree($input);
+$binaryTree = new BinaryTree();
+$tree = $binaryTree->buildBinaryTree($input);
 
-//printLevelOrder($tree); // Output: [3,9,20,null,null,15,7]
 
 $solution = new BFSZigzagLevelOrder();
 $ans = $solution->levelOrder($tree);
