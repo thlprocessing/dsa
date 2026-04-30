@@ -24,7 +24,7 @@ class BFSZigzagLevelOrder
      * @param TreeNode $root
      * @return Integer[][]
      */
-    function levelOrder($root) {
+    function zigzagLevelOrder($root) {
 
         if(!$root) {
             return [];
@@ -158,5 +158,5 @@ $tree = $binaryTree->buildBinaryTree($input);
 
 
 $solution = new BFSZigzagLevelOrder();
-$ans = $solution->levelOrder($tree);
+$ans = $solution->zigzagLevelOrder($tree);
 var_dump($ans);
