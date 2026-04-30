@@ -33,11 +33,14 @@ class PathSum {
         if(!$node) {
             return 0;
         }
-
+        
+        # return as quick as possible once pathSum is found to targetSum
         if($this->isFound) {
             return;
         }
         
+        # Top-down check before going to subtree
+
         $pathSum += $node->val;
 
         # leaf node
@@ -45,7 +48,7 @@ class PathSum {
             $this->isFound = true;
         }
 
-
+        # Subtree check
         $this->findPathSum($node->left, $pathSum);
         $this->findPathSum($node->right, $pathSum);
 
