@@ -23,13 +23,23 @@ class DFSLowestCommonAncestor {
         }
 
         $this->isFound = null;
+        $this->p       = $p;
+        $this->q       = $q;
 
-        $this->dfs($root, $p, $q);
+        $this->dfs($root);
 
         return $this->isFound;
 
     }
 
+    /**
+     * 
+     * Farthest Common Ancestor
+     * @param mixed $node
+     * @param mixed $p
+     * @param mixed $q
+     * @return int
+     */
     function hasDescendant($node, $p, $q)
     {
 
@@ -56,8 +66,17 @@ class DFSLowestCommonAncestor {
             return $this->isFound;
         }
 
-        if(($node->left?->val === $p || $node->right?->val === $p || $this->ancestor->val === $p) &&  
-            ($node->left?->val === $q || $node->right?->val === $q || $this->ancestor->val === $q)
+        if($this->ancestor->val === 1) {
+            echo "ancester: " . $this->ancestor->val . "\n";
+            echo "node: " . $node->val . "\n";
+            echo "node left: "  . $node->left?->val . "\n";
+            echo "node right: " . $node->right?->val . "\n";
+            echo "p: " . $p->val . "\n";
+            echo "q: " . $q->val . "\n";
+        }
+
+        if(($node->left?->val === $p->val || $node->right?->val === $p->val || $this->ancestor?->val === $p->val) &&  
+            ($node->left?->val === $q->val || $node->right?->val === $q->val || $this->ancestor?->val === $q->val)
         ) {
             
             return $this->isFound = $this->ancestor;
@@ -67,26 +86,57 @@ class DFSLowestCommonAncestor {
         $this->findDescendant($node->right, $p, $q);
     }
 
-    function dfs($node, $p, $q)
+    function dfs($node)
     {
 
         if(!$node) {
-            return 0;
+            return [null, null];
         }
+
         
-        # return as quick as possible once pathSum is found to targetSum
-        if($this->isFound) {
-            return $this->isFound;
-        }
+        $is_ancestor_of_p = $this->p->val === $node->val;
+        $is_ancestor_of_q = $this->q->val === $node->val;
+
+        echo "node: "       . $node->val                        . "\n";
+        echo "node left: "  . $node->left?->val                 . "\n";
+        echo "node right: " . $node->right?->val                . "\n";
+        echo "p: "          . $this->p->val                     . "\n";
+        echo "q: "          . $this->q->val                     . "\n";
+        echo "is_ancestor_of_p: "      . $is_ancestor_of_p   . "\n";
+        echo "is_ancestor_of_q: "      . $is_ancestor_of_q   . "\n";
+
         
-        $this->hasDescendant($node, $p, $q);
 
         # Subtree check
-        $this->dfs($node->left, $p, $q);
-        $this->dfs($node->right, $p, $q);
+        [$left_p, $left_q]      = $this->dfs($node->left);
+        [$right_p, $right_q]    = $this->dfs($node->right);
 
-     
-        return $this->isFound;
+
+        echo "left_p: "      . $left_p    . "\n";
+        echo "left_q: "      . $left_q    . "\n";
+        echo "right_p: "     . $right_p   . "\n";
+        echo "right_q: "     . $right_q   . "\n";
+
+
+        if($left_p || $right_p) {
+            $is_ancestor_of_p = true;
+        }
+
+        if($left_q || $right_q) {
+            $is_ancestor_of_q = true;
+        }
+
+        echo "is_ancestor_of_p: "      . $is_ancestor_of_p   . "\n";
+        echo "is_ancestor_of_q: "      . $is_ancestor_of_q   . "\n";
+
+        
+        if($is_ancestor_of_p && $is_ancestor_of_q && $this->isFound === null) {
+            $this->isFound = $node;
+        }
+
+
+        return [$is_ancestor_of_p, $is_ancestor_of_q];
+
     }
 
 }
@@ -176,13 +226,32 @@ function printLevelOrder($root) {
 
 
 // Example usage:
-$input = [3,5,1,6,2,0,8,null,null,7,4];
-$tree = buildBinaryTree($input);
+$data = [3,5,1,6,2,0,8,null,null,7,4];
+$tree = buildBinaryTree($data);
 
+$p = new TreeNode(5);
+$q = new TreeNode(1);
 
 $solution = new DFSLowestCommonAncestor();
-$ans = $solution->lowestCommonAncestor($tree, 5, 1);
-var_dump($ans);
+// $ans = $solution->lowestCommonAncestor($tree, $p, $q);
+// var_dump($ans);     # output: 3
 
-$ans2 = $solution->lowestCommonAncestor($tree, 5, 4);
-var_dump($ans2);
+$p = new TreeNode(5);
+$q = new TreeNode(4);
+
+$ans2 = $solution->lowestCommonAncestor($tree, $p, $q);
+var_dump($ans2);       # output: 5
+
+// $data2 = [1,2,3,null,4];
+// $tree2 = buildBinaryTree($data2);
+
+// $p = new TreeNode(4);
+// $q = new TreeNode(3);
+
+
+// $ans3 = $solution->lowestCommonAncestor($tree2, $p, $q);
+// var_dump($ans3);
+
+//         1
+//     2       3
+// null    4
