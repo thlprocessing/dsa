@@ -93,6 +93,9 @@ class DFSLowestCommonAncestor {
             return [null, null];
         }
 
+        if($this->isFound) {
+            return;
+        }
         
         $is_ancestor_of_p = $this->p->val === $node->val;
         $is_ancestor_of_q = $this->q->val === $node->val;
@@ -255,3 +258,101 @@ var_dump($ans2);       # output: 5
 //         1
 //     2       3
 // null    4
+
+
+/**
+ 
+node: 3
+node left: 5
+node right: 1
+p: 5
+q: 4
+is_ancestor_of_p: 
+is_ancestor_of_q: 
+
+# sub(3)-left(5)
+node: 5
+node left: 6
+node right: 2
+p: 5
+q: 4
+is_ancestor_of_p: 1
+is_ancestor_of_q: 
+
+# sub(3)-left(5)-left(6)
+node: 6
+node left: 
+node right: 
+p: 5
+q: 4
+is_ancestor_of_p: 
+is_ancestor_of_q: 
+left_p: 
+left_q: 
+right_p: 
+right_q: 
+is_ancestor_of_p: 
+is_ancestor_of_q:
+
+# sub(3)-left(5)-right(2)
+node: 2
+node left: 7
+node right: 4
+
+p: 5
+q: 4
+is_ancestor_of_p: 
+is_ancestor_of_q: 
+
+# sub(3)-left(5)-right(2)-left(7)
+node: 7
+node left: 
+node right: 
+p: 5
+q: 4
+is_ancestor_of_p: 
+is_ancestor_of_q: 
+left_p: 
+left_q: 
+right_p: 
+right_q: 
+is_ancestor_of_p: 
+is_ancestor_of_q: 
+
+# sub(3)-left(5)-right(2)-right(4)
+node: 4
+node left: 
+node right: 
+p: 5
+q: 4
+is_ancestor_of_p: 
+is_ancestor_of_q: 1
+left_p: 
+left_q: 
+right_p: 
+right_q: 
+is_ancestor_of_p: 
+is_ancestor_of_q: 1
+
+# back_track # sub(3)-left(5)-right(2)
+left_p: 
+left_q: 
+right_p: 
+right_q: 1
+is_ancestor_of_p: 
+is_ancestor_of_q: 1
+
+# back_track sub(3)-left(5)
+left_p: 
+left_q: 
+right_p: 
+right_q: 1
+is_ancestor_of_p: 1
+is_ancestor_of_q: 1
+left_p: 1
+left_q: 1
+right_p: 
+right_q: 
+is_ancestor_of_p: 1
+is_ancestor_of_q: 1
+ */
