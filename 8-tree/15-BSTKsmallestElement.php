@@ -44,24 +44,16 @@ class BSTKsmallestElement{
             return;
         }
         
-
-        // if($node->val <= $this->k) {
-        //     $this->count++;
-        // }
-
-        # Subtree check
+        # Perform inOrder traversal on BST produces a sorted list
+        
         $this->dfs($node->left);
 
         $this->count++;
         
-         if ($this->count === $this->k) {
+        if ($this->count === $this->k) {
             $this->ans = $node->val;
-            return; // Found the k-th smallest element
+            return; // Found the k-th smallest element on sorted list when performing inOrder Traversal
         }
-
-        // echo "node: "   . $node->val . "\n";
-        // echo "k: "      . $this->k   . "\n"; 
-
         
         $this->dfs($node->right);
 
