@@ -32,14 +32,19 @@ class DFSSumWithinRange {
         return $this->totalSumWithinRange;
     }
 
-    function dfs($node, $left, $right)
+    function dfs($node, $leftBound, $rightBound)
     {
 
         if(!$node) {
             return;
         }
-
-        if($left > $this->highRange or $right < $this->lowRange) {
+        # rightBound of left_subtree < lowRange or highRange < leftBound of right_subtree -> STOP
+        if($rightBound < $this->lowRange || $this->highRange < $leftBound) {
+            // echo "node: "           . $node->val . " \n";
+            // echo "left: "           . $leftBound . "\n";
+            // echo "high  range: "    . $this->highRange  .  " \n";
+            // echo "right: "          . $rightBound . "\n";
+            // echo "low range: "      . $this->lowRange  .  " \n";
             return;
         }
 
@@ -48,12 +53,13 @@ class DFSSumWithinRange {
         }            
 
         # Subtree check
-        echo "node left: " . $node->left?->val . "\n";
-        echo "left  range: [$left" .   " $node->val] \n";
-        $this->dfs($node->left, $left, $node->val);
-        echo "node right: " . $node->right?->val . "\n";
-        echo "right range: [$right" .   " $node->val] \n";
-        $this->dfs($node->right, $node->val, $right);
+        // echo "node left: "  . $node->left?->val . "\n";
+        // echo "left  range:  [$leftBound" .   " $node->val] \n";
+        // echo "node right: " . $node->right?->val . "\n";
+        // echo "right range:  [$node->val" .   " $rightBound] \n";
+
+        $this->dfs($node->left, $leftBound, $node->val);
+        $this->dfs($node->right, $node->val, $rightBound);
 
         return $node;
 
