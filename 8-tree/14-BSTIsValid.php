@@ -3,11 +3,11 @@
 class ValidBinarySearchTree {
     
 
-    public $isValidSBT = true;
+    public $isValidBST = true;
 
     /**
      * @param TreeNode $root
-     * @return Boolean
+     * @return bool
      */
     function isValidBST($root) {
 
@@ -17,7 +17,7 @@ class ValidBinarySearchTree {
 
         $this->dfs($root, -INF, INF);
 
-        return $this->isValidSBT;
+        return $this->isValidBST;
     }
 
     function dfs($node, $left, $right)
@@ -27,12 +27,12 @@ class ValidBinarySearchTree {
             return;
         }
 
-        if(!$this->isValidSBT) {
+        if(!$this->isValidBST) {
             return;
         }
 
-        if($this->isValidSBT === true && !($left < $node->val && $node->val <  $right)) {
-            $this->isValidSBT = false;
+        if($this->isValidBST === true && !($left < $node->val && $node->val <  $right)) {
+            $this->isValidBST = false;
         }            
 
         # Subtree check
