@@ -24,12 +24,20 @@ class Combinations {
         $used = [];
         $current_combination = [];
 
-
-        $this->choose($current_using, $used, $current_combination);
+        $this->choose(0, $current_combination);
+        //$this->chooseOld($current_using, $used, $current_combination);
         return $this->ans;
     }
 
-    function chooseOld($used, $current_combination)
+    /**
+     * 
+     * Runtime: 444 ms
+     * Beats: 5.00%
+     * @param mixed $current_using
+     * @param mixed $current_combination
+     * @return void
+     */
+    function choose($current_using, $current_combination)
     {
         if(count($current_combination) === $this->k)
         {
@@ -37,29 +45,30 @@ class Combinations {
             return;
         }
 
-        foreach(range(1, $this->n) as $i)
-        {
             
-            $current_used = (int) implode(",", $used);
-            if(!in_array($i, $used) && $i > $current_used) {
+        // Optimization 1: Start loop from $current_using + 1 to avoid redundant checks.
+        // Optimization 2: Prune the search space if there are not enough remaining elements to complete the combination.
+        $needed = $this->k - count($current_combination);
+        $end = $this->n - $needed + 1;
 
-                echo "i: " . $i  . "\n";
-                echo "current_used" . $current_used . "\n";
-                echo "used: " . implode(",", $used) . "\n";  
-
-                $used[$i] = $i;
-                array_push($current_combination, $i);
-                echo "using: " . implode(",", $used) . "\n";  
-                $this->choose($used, $current_combination);
-                array_pop($current_combination);
-                unset($used[$i]);
-            }
-            
+        for ($i = $current_using + 1; $i <= $end; $i++) {
+            array_push($current_combination, $i);
+            $this->choose($i, $current_combination);
+            array_pop($current_combination);                
         }
+        
     }
 
-
-    function choose($current_using, $used, $current_combination)
+    /**
+     * 
+     * Runtime: 459 ms
+     * Beats: 5.00%
+     * @param mixed $current_using
+     * @param mixed $used
+     * @param mixed $current_combination
+     * @return void
+     */
+    function chooseOld($current_using, $used, $current_combination)
     {
         if(count($current_combination) === $this->k)
         {
