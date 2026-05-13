@@ -20,11 +20,9 @@ class Combinations {
         $this->k = $k;
         $this->ans = [];
 
-        $current_using = null;
-        $used = [];
         $current_combination = [];
 
-        $this->choose(0, $current_combination);
+        $this->choose(1, $current_combination);
         //$this->chooseOld($current_using, $used, $current_combination);
         return $this->ans;
     }
@@ -41,20 +39,28 @@ class Combinations {
     {
         if(count($current_combination) === $this->k)
         {
+            
+            echo "ans current_using: " . $current_using . " current_com: " . implode(",", $current_combination) . "\n";
             $this->ans[] = $current_combination;
             return;
         }
 
             
-        // Optimization 1: Start loop from $current_using + 1 to avoid redundant checks.
-        // Optimization 2: Prune the search space if there are not enough remaining elements to complete the combination.
-        $needed = $this->k - count($current_combination);
-        $end = $this->n - $needed + 1;
+        // // Optimization 1: Start loop from $current_using + 1 to avoid redundant checks.
+        // // Optimization 2: Prune the search space if there are not enough remaining elements to complete the combination.
+        // $needed = $this->k - count($current_combination);
+        // $end = $this->n - $needed + 1;
+        $end = $this->n;
 
-        for ($i = $current_using + 1; $i <= $end; $i++) {
+        for ($i = $current_using; $i <= $end; $i++) {
+
             array_push($current_combination, $i);
-            $this->choose($i, $current_combination);
+            echo "i: $i " . " push_com: " . implode(",", $current_combination) . "\n";            
+            echo "before choose: " . ($i + 1)  . " current_com: " . implode(",", $current_combination) . "\n";
+            $this->choose($i + 1, $current_combination);
+            echo "after choose: " . ($i + 1)  . " current_com: " . implode(",", $current_combination) . "\n";
             array_pop($current_combination);                
+            echo "i: $i "   . " pop_com: " . implode(",", $current_combination) . "\n";
         }
         
     }
