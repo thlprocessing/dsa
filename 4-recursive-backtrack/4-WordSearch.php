@@ -31,7 +31,7 @@ class WordSearch {
         $this->word = $word;
         $this->current_combination = "";
 
-        $this->visited = [];
+        
 
         if(!$this->grid) {
             return 0;
@@ -44,14 +44,17 @@ class WordSearch {
 
         for($r = 0; $r < $this->rLength; $r++) {
             for($c = 0; $c < $this->cLength; $c++) {
-                echo "visiting: $r+$c: " . $this->grid[$r][$c] . "\n";
+
+                $this->visited = [];
+
+                //echo "visiting: $r+$c: " . $this->grid[$r][$c] . "\n";
                 if(!isset($this->visited["$r+$c"]) && $this->grid[$r][$c] === $this->word[0]) {
-                    echo "current_combination: " .  $this->current_combination . "\n";
+                    //echo "current_combination: " .  $this->current_combination . "\n";
                     $this->current_combination .= $this->grid[$r][$c];
-                    echo "current_combination: " .  $this->current_combination . "\n";
+                    //echo "current_combination: " .  $this->current_combination . "\n";
                     $this->dfs($r, $c);
                     $this->current_combination = substr($this->current_combination, 0, -1);
-                    echo "pop current_combination: " .  $this->current_combination . "\n";
+                    //echo "pop current_combination: " .  $this->current_combination . "\n";
                 }
             }
         }
@@ -80,24 +83,29 @@ class WordSearch {
             #echo "----dfs visiting next_r next_c: $next_r+$next_c \n";
             if(0 <= $next_r && $next_r < $this->rLength && 0 <= $next_c && $next_c < $this->cLength) {
 
-                echo "----current_combination: " .  $this->current_combination . "\n";
+                //echo "----current_combination: " .  $this->current_combination . "\n";
                 $this->current_combination .= $this->grid[$next_r][$next_c];
-                echo "----dfs visiting next_r next_c: $next_r+$next_c | value: " . $this->grid[$next_r][$next_c] . "\n";                
-                echo "----add current_combination: " .  $this->current_combination . "\n";
+                //echo "----dfs visiting next_r next_c: $next_r+$next_c | value: " . $this->grid[$next_r][$next_c] . "\n";                
+                //echo "----add current_combination: " .  $this->current_combination . "\n";
+                
 
                 if(str_contains($this->word, $this->current_combination)) {                    
                     
-                    if (!isset($this->visited["$next_r+$next_c"])) {
-                        echo "------dfs visiting next_r next_c: $next_r+$next_c | value: " . $this->grid[$next_r][$next_c] . "\n";
+                    if (!isset($this->visited["$next_r+$next_c"]) || !$this->visited["$next_r+$next_c"]) {
+                        // echo "------dfs visiting next_r next_c: $next_r+$next_c | value: " . $this->grid[$next_r][$next_c] . "\n";
                         $this->dfs($next_r, $next_c);
+                        # reset visited on backtrack returning
+                        unset($this->visited["$next_r+$next_c"]);
                     }
                 }
                 
                 $this->current_combination = substr($this->current_combination, 0, -1);
-                echo "------pop current_combination: " .  $this->current_combination . "\n";
+                // echo "------pop current_combination: " .  $this->current_combination . "\n";
             } 
             
         }
+        # reset visited for each cell
+        unset($this->visited["$r+$c"]);
     }
 }
 
@@ -117,7 +125,7 @@ echo in_array([1,2], [[1,2], [3,4]]);
 $board1 = [["C","A","A"],["A","A","A"],["B","C","D"]];
 $word1  = "AAB";
 
-echo $solution->exist($board1, $word1);     # output: true
+//echo $solution->exist($board1, $word1);     # output: true
 
 # A B C E
 # S F C S
@@ -128,4 +136,18 @@ $word2  = "ABCB";
 
 //echo $solution->exist($board2, $word2);         # output: false
 
+# A B C E
+# S F E S
+# A D E E
+$board3 = [["A","B","C","E"],["S","F","E","S"],["A","D","E","E"]];
+$word3  = "ABCESEEEFS";
 
+
+//echo $solution->exist($board3, $word3);         # output: true
+
+
+
+$board4 = [["A","A","A","A","A","A"],["A","A","A","A","A","A"],["A","A","A","A","A","A"],["A","A","A","A","A","A"],["A","A","A","A","A","A"],["A","A","A","A","A","A"]];
+$word4  = "AAAAAAAAAAAAAAa";
+
+echo $solution->exist($board4, $word4);         # output: true
