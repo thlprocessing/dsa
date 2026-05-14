@@ -81,11 +81,9 @@ class SurroundedRegions
     public function dfs($r, $c)
     {
 
-        
-
         $this->visited["$r+$c"] = true;
         $this->color_nodes[]    = [$r, $c];
-        $this->is_having_edges = false;        
+        $this->is_having_edges  = false;        
 
         #echo "r: $r, c: $c \n";
         #echo "visited: \n";
@@ -129,7 +127,8 @@ class SurroundedRegions
                     }
                     
                     # reset visited on backtrack returning
-                    unset($this->visited["$next_r+$next_c"]);
+                    #unset($this->visited["$next_r+$next_c"]);
+                    #gc_collect_cycles(); # unsetting items in a long loop, manually trigger the garbage collector to reclaim memory immediately
                     #echo "visited backtrack: \n";   
                     #var_dump($this->visited);
                 }
@@ -138,7 +137,8 @@ class SurroundedRegions
 
 
         # reset visited for each cell
-        unset($this->visited["$r+$c"]);
+        #unset($this->visited["$r+$c"]);
+        #gc_collect_cycles(); # unsetting items in a long loop, manually trigger the garbage collector to reclaim memory immediately
 
         return $this->is_having_edges;
     }
@@ -224,4 +224,4 @@ print_r($solution->solve($grid4));    # output: [["O","O","O"],["O","O","O"],["O
 
 print_r($solution->solve($grid6));          # output: [["O","X","O","O","O","X"],["O","O","X","X","X","O"],["X","X","X","X","X","O"],["O","O","O","O","X","X"],["X","X","O","O","X","O"],["O","O","X","X","X","X"]]
 
-#print_r($solution->solve($grid7));          # Allowed memory size of 134217728 bytes exhausted
+print_r($solution->solve($grid7));          # Allowed memory size of 134217728 bytes exhausted
