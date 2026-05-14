@@ -1,6 +1,6 @@
 <?php
 
-class NumberOfIslands
+class DFSNumberOfIslands
 {
 
     public $grid;
@@ -46,6 +46,14 @@ class NumberOfIslands
         return $count;
     }
 
+    /**
+     * 
+     * Runtime: 129 ms
+     * Memory: 39.62 MB
+     * @param mixed $r
+     * @param mixed $c
+     * @return void
+     */
     public function dfs($r, $c)
     {
         $this->visited["$r+$c"] = true;
@@ -78,6 +86,6 @@ $grid1 = [
   ["0","0","0","1","1"]
 ];
 
-$solution = new NumberOfIslands();
+$solution = new DFSNumberOfIslands();
 echo $solution->numIslands($grid) . "\n";   # output: 1
 echo $solution->numIslands($grid1) . "\n";  # output: 3
