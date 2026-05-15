@@ -1,6 +1,10 @@
 <?php
 
-class WordSearch {
+/**
+ * 
+ * Find Path
+ */
+class DFSWordSearch {
 
 
     public $grid;
@@ -48,7 +52,7 @@ class WordSearch {
                 $this->visited = [];
 
                 //echo "visiting: $r+$c: " . $this->grid[$r][$c] . "\n";
-                if(!isset($this->visited["$r+$c"]) && $this->grid[$r][$c] === $this->word[0]) {
+                if((!isset($this->visited["$r+$c"]) || !$this->visited["$r+$c"]) && $this->grid[$r][$c] === $this->word[0]) {
                     //echo "current_combination: " .  $this->current_combination . "\n";
                     $this->current_combination .= $this->grid[$r][$c];
                     //echo "current_combination: " .  $this->current_combination . "\n";
@@ -62,6 +66,14 @@ class WordSearch {
         return $this->isFound;
     }
 
+
+    /**
+     * 
+     * Time Limit Exceeded 85 / 88 testcases passed
+     * @param mixed $r
+     * @param mixed $c
+     * @return void
+     */
     function dfs($r, $c)
     {
 
@@ -87,16 +99,13 @@ class WordSearch {
                 $this->current_combination .= $this->grid[$next_r][$next_c];
                 //echo "----dfs visiting next_r next_c: $next_r+$next_c | value: " . $this->grid[$next_r][$next_c] . "\n";                
                 //echo "----add current_combination: " .  $this->current_combination . "\n";
-                
-
-                if(str_contains($this->word, $this->current_combination)) {                    
                     
-                    if (!isset($this->visited["$next_r+$next_c"]) || !$this->visited["$next_r+$next_c"]) {
-                        // echo "------dfs visiting next_r next_c: $next_r+$next_c | value: " . $this->grid[$next_r][$next_c] . "\n";
-                        $this->dfs($next_r, $next_c);
-                        # reset visited on backtrack returning
-                        unset($this->visited["$next_r+$next_c"]);
-                    }
+                if ((!isset($this->visited["$next_r+$next_c"]) || !$this->visited["$next_r+$next_c"]) && str_contains($this->word, $this->current_combination)) {
+                    // echo "------dfs visiting next_r next_c: $next_r+$next_c | value: " . $this->grid[$next_r][$next_c] . "\n";
+                    $this->dfs($next_r, $next_c);
+                    # reset visited on backtrack returning
+                    # unset($this->visited["$next_r+$next_c"]);       # Time Limit Exceeded on unset
+                    $this->visited["$next_r+$next_c"] = false;
                 }
                 
                 $this->current_combination = substr($this->current_combination, 0, -1);
@@ -105,13 +114,14 @@ class WordSearch {
             
         }
         # reset visited for each cell
-        unset($this->visited["$r+$c"]);
+        # unset($this->visited["$r+$c"]); # Time Limit Exceeded on unset
+        $this->visited["$r+$c"] = false;
     }
 }
 
 $board = [["A","B"],["C","D",],["E","F"]];
 $word  = "AB";
-$solution = new WordSearch();
+$solution = new DFSWordSearch();
 
 echo in_array([1,2], [[1,2], [3,4]]);
 
@@ -134,7 +144,7 @@ $word1  = "AAB";
 $board2 = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]];
 $word2  = "ABCB";
 
-//echo $solution->exist($board2, $word2);         # output: false
+echo $solution->exist($board2, $word2);         # output: true
 
 # A B C E
 # S F E S
@@ -150,4 +160,4 @@ $word3  = "ABCESEEEFS";
 $board4 = [["A","A","A","A","A","A"],["A","A","A","A","A","A"],["A","A","A","A","A","A"],["A","A","A","A","A","A"],["A","A","A","A","A","A"],["A","A","A","A","A","A"]];
 $word4  = "AAAAAAAAAAAAAAa";
 
-echo $solution->exist($board4, $word4);         # output: true
+#echo $solution->exist($board4, $word4);         # output: true
