@@ -41,6 +41,13 @@ class CloneGraph {
 
     }
 
+    /**
+     * 
+     * Runtime: 16 ms
+     * Memory: 21.11 MB
+     * @param mixed $nodeI
+     * @return Node
+     */
     function dfs($nodeI) {
 
 
@@ -54,19 +61,19 @@ class CloneGraph {
             return $this->visited[$nodeI->val];
         }
 
-        $clonedNode   = new Node($nodeI->val);
-        $this->visited[$nodeI->val] = $clonedNode;
+        $clonedNodeI   = new Node($nodeI->val);
+        $this->visited[$nodeI->val] = $clonedNodeI;
 
         foreach($nodeI->neighbors as $nodeJ) {
             
                              
             #array_push($this->path, $j);
-            $clonedNode->neighbors[] = $this->dfs($nodeJ);
+            $clonedNodeI->neighbors[] = $this->dfs($nodeJ);
             #array_pop($this->path);
             
         }
         
-        return $clonedNode;
+        return $clonedNodeI;
     }
 }
 
