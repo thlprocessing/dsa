@@ -1,15 +1,16 @@
 <?php
 
-class QuickFind {
+class QuickUnion {
 
 
     public $n;
 
     /**
-     * Root Vertex
+     * 
+     * Parent Vertex
      * @var array
      */
-    public $root = [];
+    public $parent = [];
 
     
     /**
@@ -20,9 +21,9 @@ class QuickFind {
     {
         $this->n      = $n;
         # initial value of its value
-        #$this->root = array_fill(0, $n + 1, -1);
+        # $this->parent = array_fill(0, $n + 1, -1);
         for($i = 0; $i < $n; $i++) {
-            $this->root[$i] = $i;
+            $this->parent[$i] = $i;
         }
     }
 
@@ -38,7 +39,11 @@ class QuickFind {
      */
     public function find($i)
     {
-        return $this->root[$i];
+        while($i !== $this->parent[$i]) {
+            $i = $this->parent[$i];
+        }
+
+        return $i;
     }
 
 
@@ -52,18 +57,15 @@ class QuickFind {
 
         if($u !== $v) {
             
-            for($i = 0; $i < $this->n; $i++) {
-                if($this->root[$i] === $v) {
-                    $this->root[$i] = $u;
-                }
+            $this->parent[$v] = $u;
 
-            }
         }
     }
 }
 
 
-$solution = new QuickFind(10);
+
+$solution = new QuickUnion(10);
 
 # union 1-2-5-6-7 3-8-9 4
 $solution->union(1, 2);
@@ -74,8 +76,9 @@ $solution->union(3, 8);
 $solution->union(8, 9);
 
 
-echo "root vertex: " . implode(",", $solution->root) . "\n";
-echo "     vertex: " . implode(",", array_keys($solution->root)) . "\n";
+
+echo "root vertex: " . implode(",", $solution->parent) . "\n";
+echo "     vertex: " . implode(",", array_keys($solution->parent)) . "\n";
 
 #root vertex: 0,1,1,3,4,1,1,1,3,3
 #     vertex: 0,1,2,3,4,5,6,7,8,9
@@ -90,8 +93,8 @@ $solution->union(9, 4);
 echo (bool) $solution->query(4, 9) . " query \n";     # true 
 
 
-echo "root vertex: " . implode(",", $solution->root) . "\n";
-echo "     vertex: " . implode(",", array_keys($solution->root)) . "\n";
+echo "root vertex: " . implode(",", $solution->parent) . "\n";
+echo "     vertex: " . implode(",", array_keys($solution->parent)) . "\n";
 
 # root vertex: 0,1,1,3,3,1,1,1,3,3
 #      vertex: 0,1,2,3,4,5,6,7,8,9
