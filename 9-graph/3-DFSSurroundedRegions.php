@@ -60,7 +60,7 @@ class SurroundedRegions
                         # color visited nodes without having edges
                         #echo "r: $r, c: $c \n";
                         #echo "is_having_edges: $is_having_edges \n";
-                        if(!$this->is_having_edges) {
+                        if(!$is_having_edges) {
                             #echo "color_nodes: \n";
                             #var_dump($this->color_nodes);
                             foreach($this->color_nodes as [$node_r, $node_c]) {

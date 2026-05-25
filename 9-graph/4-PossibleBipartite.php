@@ -1,6 +1,7 @@
 <?php
 
-class IsGraphBipartite {
+class PossibleBipartite {
+
 
     const WHITE = -1;
     
@@ -12,6 +13,8 @@ class IsGraphBipartite {
 
     public $n;
 
+    public $numberOfPeople;
+
     public $ans = true;
 
     public $path = [];
@@ -20,27 +23,33 @@ class IsGraphBipartite {
 
     public $visitedColors = [];
 
-
     /**
-     * @param Integer[][] $graph
+     * @param Integer $n
+     * @param Integer[][] $dislikes
      * @return Boolean
      */
-    function isBipartite($graph) {
+    function possibleBipartition($n, $dislikes) {
           
-        $this->graph = $graph;
-        $this->n     = count($graph);
+        $this->n   = $n;
+        $this->ans = true;
+        $this->visitedColors = array_fill(0, $n + 1, self::WHITE);
         
-        $this->visited = [];
-        $this->ans     = true;
-        $this->path    = [];
-        $this->visitedColors = array_fill(0, $this->n, self::WHITE);
+        $this->graph = array_fill(0, $n + 1, []);
+        # ?!
+        foreach ($dislikes as $edge) {
+            $i = $edge[0];
+            $j = $edge[1];
+            $this->graph[$i][] = $j;
+            $this->graph[$j][] = $i;
+        }
 
-        if(!$graph) {
+        if(!$this->graph) {
             return false;
         }
 
+
         # start from first node
-        for($i = 0; $i < $this->n; $i++) {
+        for($i = 1; $i <= $n; $i++) {
             # dfs unvisited node
             if($this->visitedColors[$i] === self::WHITE) {
                 $this->visitedColors[$i] = self::RED;
@@ -76,13 +85,11 @@ class IsGraphBipartite {
 }
 
 
+$solution = new PossibleBipartite();
 
 
-$solution = new IsGraphBipartite();
+$grid = [[1,2],[1,3],[2,4]];
+echo $solution->possibleBipartition(4, $grid) . "\n";   # output: true
 
-
-$grid = [[1,2,3],[0,2],[0,1,3],[0,2]];
-#echo $solution->isBipartite($grid) . "\n";   # output: false
-
-$grid1 = [[1,3],[0,2],[1,3],[0,2]];
-echo $solution->isBipartite($grid1) . "\n";   # output: true
+$grid1 = [[1,2],[1,3],[2,3]];
+#echo $solution->possibleBipartition(3, $grid1) . "\n";   # output: false
