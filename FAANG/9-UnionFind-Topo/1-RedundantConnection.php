@@ -1,5 +1,8 @@
 <?php
 
+/**
+ *  DSU:  cycle detection, connected components, or minimum spanning trees
+ */ 
 class RedundantConnection {
 
 
@@ -78,7 +81,9 @@ class RedundantConnection {
 
         if($u !== $v) {
             $this->parent[$v] = $u;
-        } else {
+        } 
+        # cycle detected
+        else {
             # If both vertices have the same representative would form a cycle -> cycle detected
             $this->ans[] = [$i, $j];
         }
