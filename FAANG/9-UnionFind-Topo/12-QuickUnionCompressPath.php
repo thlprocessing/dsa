@@ -45,7 +45,7 @@ class QuickUnionCompressPath {
             echo "backtrack: i: $i \n";
             return $i;
         }
-        
+        ## Path Compression
         # next call on same node: recursion and backtrack set
         echo "--i: $i - parent[$i]: " . $this->parent[$i] . "\n";
         echo "--recursion and backtrack set: parent[$i] =  find(this->parent[$i] \n";
