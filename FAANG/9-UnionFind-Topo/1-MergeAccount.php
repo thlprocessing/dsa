@@ -26,11 +26,12 @@ class MergeAccount {
      * @return String[][]
      */
     function accountsMerge($accounts) {
-        
-        $this->parent = [];
-        $this->components = [];
-        $this->emails_names = [];
-        $this->ans = [];
+
+        # fraud
+        // $this->parent = [];
+        // $this->components = [];
+        // $this->emails_names = [];
+        // $this->ans = [];
         
         $this->n      = count($accounts);
         # initial value of its value
