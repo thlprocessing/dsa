@@ -1,15 +1,16 @@
 <?php
 
-class QuickFind {
+class QuickUnionCompressPath {
 
 
     public $n;
 
     /**
-     * Root Vertex
+     * 
+     * Parent Vertex
      * @var array
      */
-    public $root = [];
+    public $parent = [];
 
     
     /**
@@ -20,9 +21,9 @@ class QuickFind {
     {
         $this->n      = $n;
         # initial value of its value
-        #$this->root = array_fill(0, $n + 1, -1);
+        # $this->parent = array_fill(0, $n + 1, -1);
         for($i = 0; $i < $n; $i++) {
-            $this->root[$i] = $i;
+            $this->parent[$i] = $i;
         }
     }
 
@@ -38,32 +39,40 @@ class QuickFind {
      */
     public function find($i)
     {
-        return $this->root[$i];
+        # base case
+        echo "i: $i - parent[$i]: " . $this->parent[$i] . "\n";
+        if($i === $this->parent[$i]) {
+            echo "backtrack: i: $i \n";
+            return $i;
+        }
+        
+        # next call on same node: recursion and backtrack set
+        echo "--i: $i - parent[$i]: " . $this->parent[$i] . "\n";
+        echo "--recursion and backtrack set: parent[$i] =  find(this->parent[$i] \n";
+        return $this->parent[$i] = $this->find($this->parent[$i]);
     }
 
 
     public function union($i, $j)
     {
         # find root of the vertex i and j
+        echo "union: i: $i, j: $j \n";
         $u = $this->find($i);
         $v = $this->find($j);
 
-        echo "-- union: i: $i, j: $j, u: $u, v: $v \n";
+        echo "union: i: $i, j: $j, u: $u, v: $v \n \n";
 
         if($u !== $v) {
             
-            for($i = 0; $i < $this->n; $i++) {
-                if($this->root[$i] === $v) {
-                    $this->root[$i] = $u;
-                }
+            $this->parent[$v] = $u;
 
-            }
         }
     }
 }
 
 
-$solution = new QuickFind(10);
+
+$solution = new QuickUnionCompressPath(10);
 
 # union 1-2-5-6-7 3-8-9 4
 $solution->union(1, 2);
@@ -74,8 +83,9 @@ $solution->union(3, 8);
 $solution->union(8, 9);
 
 
-echo "root vertex: " . implode(",", $solution->root) . "\n";
-echo "     vertex: " . implode(",", array_keys($solution->root)) . "\n";
+
+echo "root vertex: " . implode(",", $solution->parent) . "\n";
+echo "     vertex: " . implode(",", array_keys($solution->parent)) . "\n";
 
 #root vertex: 0,1,1,3,4,1,1,1,3,3
 #     vertex: 0,1,2,3,4,5,6,7,8,9
@@ -90,8 +100,8 @@ $solution->union(9, 4);
 echo (bool) $solution->query(4, 9) . " query \n";     # true 
 
 
-echo "root vertex: " . implode(",", $solution->root) . "\n";
-echo "     vertex: " . implode(",", array_keys($solution->root)) . "\n";
+echo "root vertex: " . implode(",", $solution->parent) . "\n";
+echo "     vertex: " . implode(",", array_keys($solution->parent)) . "\n";
 
 # root vertex: 0,1,1,3,3,1,1,1,3,3
 #      vertex: 0,1,2,3,4,5,6,7,8,9

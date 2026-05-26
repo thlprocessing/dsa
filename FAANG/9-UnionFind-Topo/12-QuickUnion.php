@@ -53,7 +53,7 @@ class QuickUnion {
         $u = $this->find($i);
         $v = $this->find($j);
 
-        echo "-- after find: i: $i, j: $j, u: $u, v: $v \n";
+        echo "-- union: i: $i, j: $j, u: $u, v: $v \n";
 
         if($u !== $v) {
             
