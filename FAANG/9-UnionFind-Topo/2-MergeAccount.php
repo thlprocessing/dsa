@@ -26,12 +26,11 @@ class MergeAccount {
      * @return String[][]
      */
     function accountsMerge($accounts) {
-
-        # fraud
-        // $this->parent = [];
-        // $this->components = [];
-        // $this->emails_names = [];
-        // $this->ans = [];
+        
+        $this->parent = [];
+        $this->components = [];
+        $this->emails_names = [];
+        $this->ans = [];
         
         $this->n      = count($accounts);
         # initial value of its value
@@ -78,7 +77,7 @@ class MergeAccount {
             }
         }
 
-        $this->connectedComponents();
+        $this->connectComponents();
 
 
         $ans = [];
@@ -91,11 +90,12 @@ class MergeAccount {
         return $ans;
     }
 
-    public function connectedComponents()
+    public function connectComponents()
     {
+
         foreach($this->parent as $component => $_) {
-            $root = $this->find($component);
-            $this->components[$root][] = $component;
+            $representative = $this->find($component);
+            $this->components[$representative][] = $component;
         }
 
         return $this->components;
