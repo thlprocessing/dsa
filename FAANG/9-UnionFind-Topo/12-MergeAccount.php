@@ -1,8 +1,7 @@
 <?php
 
 /**
- * DSU is for undirected graphs; DFS/BFS is for either directed graphs or undirected graphs !
- * DSU:  cycle detection, connected components, or minimum spanning trees
+ *  DSU:  cycle detection, connected components, or minimum spanning trees
  */
 class MergeAccount {
 
@@ -23,23 +22,39 @@ class MergeAccount {
     public $ans = [];
 
     /**
+     * RT: 74ms Beats 100.00%
+     * Memory: 24.79 MB Beats 100.00%
+
      * @param String[][] $accounts
      * @return String[][]
      */
     function accountsMerge($accounts) {
-        
-        $this->parent = [];
-        $this->components = [];
-        $this->emails_names = [];
-        $this->ans = [];
+        // $this->parent = [];
+        // $this->components = [];
+        // $this->emails_names = [];
+        // $this->ans = [];
         
         $this->n      = count($accounts);
+        # initial value of its value
+        # $this->parent = array_fill(0, $n + 1, -1);
+
+        // for($i = 0; $i < $this->n; $i++) {
+        //     $this->parent[$i] = $accounts[$i][0];
+        //     echo $accounts[$i][0] . "\n";
+        // }
+
+
+        # var_dump($this->parent);
 
         for($i = 0; $i < $this->n; $i++) {
-    
+            # DSU is for undirected graphs; DFS is for directed graphs ?!
+        
             $emailsLength  = count($accounts[$i]);
 
+            # echo $emailsLength . "\n";
+
             for($j = 1; $j < $emailsLength; $j++) {
+                #$this->union($accounts[$i][0], $accounts[$i][$j]);
                 $this->parent[$accounts[$i][$j]] = $accounts[$i][$j];
                 $this->emails_names[$accounts[$i][$j]] = $accounts[$i][0];
             }
@@ -48,20 +63,23 @@ class MergeAccount {
         
 
         for($i = 0; $i < $this->n; $i++) {
+            # DSU is for undirected graphs; DFS is for directed graphs ?!
         
             $emailsLength  = count($accounts[$i]);
 
+            # echo $emailsLength . "\n";
+
             for($j = 1; $j < $emailsLength; $j++) {
+                # echo $accounts[$i][$j] . "\n";
                 
                 for($k = $j + 1; $k < $emailsLength; $k++) {
-
                     $this->union($accounts[$i][$j], $accounts[$i][$k]);
                 }
                 
             }
         }
 
-        $this->connectComponents();
+        $this->connectedComponents();
 
 
         $ans = [];
@@ -74,12 +92,11 @@ class MergeAccount {
         return $ans;
     }
 
-    public function connectComponents()
+    public function connectedComponents()
     {
-
         foreach($this->parent as $component => $_) {
-            $representative = $this->find($component);
-            $this->components[$representative][] = $component;
+            $root = $this->find($component);
+            $this->components[$root][] = $component;
         }
 
         return $this->components;
@@ -97,22 +114,13 @@ class MergeAccount {
      */
     public function find($i)
     {
-    
-        $root = $i;
-
-        # node is its own parent
-        while($this->parent[$root] != $root) {
-            $root = $this->parent[$root];
+        # base case
+        if($i === $this->parent[$i]) {
+            return $i;
         }
-
-        # path compression
-        while($i != $root) {
-            $u = $this->parent[$i];
-            $this->parent[$i] = $root;
-            $i = $u;
-        }
-
-        return $root;
+        ## Path Compression
+        # next call on same node: recursion and backtrack set
+        return $this->parent[$i] = $this->find($this->parent[$i]);
     }
 
 
@@ -127,7 +135,6 @@ class MergeAccount {
         } 
     }
 }
-
 
 
 $solution = new MergeAccount();

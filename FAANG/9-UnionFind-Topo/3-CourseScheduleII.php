@@ -1,6 +1,6 @@
 <?php 
 
-class TopologicalSort {
+class CourseScheduleII {
 
 
     public $n;
@@ -105,6 +105,7 @@ class TopologicalSort {
         } else {
             return [];
         }
+    }
 
 }
 

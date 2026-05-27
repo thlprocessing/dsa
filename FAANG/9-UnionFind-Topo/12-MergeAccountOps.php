@@ -1,8 +1,7 @@
 <?php
 
 /**
- * DSU is for undirected graphs; DFS/BFS is for either directed graphs or undirected graphs !
- * DSU:  cycle detection, connected components, or minimum spanning trees
+ *  DSU:  cycle detection, connected components, or minimum spanning trees
  */
 class MergeAccount {
 
@@ -23,6 +22,8 @@ class MergeAccount {
     public $ans = [];
 
     /**
+     * RT: 83ms Beats 100.00%
+     * Memory: 25.00MB Beats 100.00%
      * @param String[][] $accounts
      * @return String[][]
      */

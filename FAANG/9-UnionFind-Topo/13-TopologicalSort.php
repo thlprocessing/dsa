@@ -1,5 +1,37 @@
 <?php 
 
+/**
+
+ * DSU is for undirected graphs; DFS is for either directed graphs or undirected graphs
+ * DSU:  cycle detection, connected components, or minimum spanning trees
+ * DFS: explore paths
+ * BFS: shortest paths
+ * General traversals used to explore paths, find shortest paths (BFS only), and detect cycles.
+ * 
+ * DFS for undirected graph: visited to traverse
+
+ * 
+ * Depth first search is more memory efficient than breadth first search as you can backtrack sooner. It is also easier to implement if you use the call stack but this relies on the longest path not overflowing the stack.
+ * 
+ * Also if your graph is directed then you have to not just remember if you have visited a node or not, but also how you got there. Otherwise you might think you have found a cycle but in reality all you have is two separate paths A->B but that doesn't mean there is a path B->A.
+ * 
+ * If you do BFS starting from 0, it will detect as cycle is present but actually there is no cycle.
+ * 
+ * With a depth first search you can mark nodes as visited as you descend and unmark them as you backtrack. See comments for a performance improvement on this algorithm.
+ * 
+ * https://stackoverflow.com/questions/2869647/why-dfs-and-not-bfs-for-finding-cycle-in-graphs
+ */
+
+
+/**
+ * https://stackoverflow.com/questions/19113189/detecting-cycles-in-a-graph-using-dfs-2-different-approaches-and-whats-the-dif
+ *
+ * Find a cycle in undirected graphs: visited node
+ *  - An undirected graph has a cycle if and only if a depth-first search (DFS) finds an edge that points to an already-visited vertex (a back edge).
+ * Find a cycle in directed graphs: in recursion stack
+ *  - In addition to visited vertices we need to keep track of vertices currently in recursion stack of function for DFS traversal. If we reach a vertex that is already in the recursion stack, then there is a cycle in the tree.
+ * /
+
 class TopologicalSort {
 
 

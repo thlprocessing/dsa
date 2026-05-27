@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  DSU is for undirected graphs; DFS/BFS is for either directed graphs or undirected graphs !
+ *  DSU is for undirected graphs; DFS is for directed graphs
  *  DSU:  cycle detection, connected components, or minimum spanning trees
  */ 
 class RedundantConnection {
@@ -20,6 +20,9 @@ class RedundantConnection {
     public $ans = [];
 
     /**
+     * RT: 1ms Beats 100.00%
+     * Memeory: 21.22MB Beats 80.00%
+
      * @param Integer[][] $edges
      * @return Integer[]
      */
@@ -32,6 +35,7 @@ class RedundantConnection {
         }
 
         for($i = 0; $i < $this->n; $i++) {
+            # DSU is for undirected graphs; DFS is for directed graph
             $this->union($edges[$i][0], $edges[$i][1]);
         }
 
@@ -58,7 +62,6 @@ class RedundantConnection {
             $root = $this->parent[$root];
         }
 
-        # path compression
         while($i != $root) {
             $u = $this->parent[$i];
             $this->parent[$i] = $root;
