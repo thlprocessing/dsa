@@ -5,7 +5,7 @@ class LongestCommonPrefix {
     /**
      * Su dung con tro di tu i tu trai sang phai
      */
-    public longestCommonPrefix()
+    public function longestCommonPrefix()
     {
         $i = 0;
 

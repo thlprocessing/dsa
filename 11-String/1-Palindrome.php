@@ -7,7 +7,7 @@ class Palindrome {
      * Sau khi chuyen thanh string roi, check palindrome
      */
 
-    public isPalindrome($x)
+    public function isPalindrome($x)
     {
         if($x < 0) {
             return false;
