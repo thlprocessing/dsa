@@ -15,7 +15,7 @@ class KthSmallestElementInArraySplMaxHeap extends SplMaxHeap {
             $this->insert($num);
                 
             
-            # similar sliding window 2 and extract smallest element out of the heap    
+            # similar sliding window 2 and extract largest element out of the heap    
             if($this->count() > $k) {
                 $this->extract();
             }

@@ -6,11 +6,12 @@ class BinarySearchMatrix extends SplMinHeap {
 
     /**
      * TC: N^2*logK
+     * TC: 110ms Beats 33.33%
      * @param Integer[][] $matrix
      * @param Integer $k
      * @return Integer
      */
-    function kthSmallestOld($matrix, $k) {
+    function kthSmallest($matrix, $k) {
 
         $this->k = $k;
         # n
@@ -67,10 +68,6 @@ class BinarySearchMatrix extends SplMinHeap {
 
         }
 
-
-        $result = $this->top();
-
-        return $matrix[$result[0]][$result[1]];
     }
 
     /**
@@ -229,6 +226,13 @@ class BinarySearchMatrix extends SplMinHeap {
 
     }
 
+    /**
+     * 
+     * RT: 28 ms Beats 66.67%
+     * SC: 23.06 MB Beats 83.33%
+     * @param array $matrix
+     * @param int $k
+     */
     public function kthSmallestHeap(array $matrix, int $k)
     {
         $n = count($matrix);
@@ -260,13 +264,7 @@ class BinarySearchMatrix extends SplMinHeap {
     }
 
 
-    /**
-     * 
-     * RT: 28 ms Beats 66.67%
-     * SC: 23.06 MB Beats 83.33%
-     * @param array $matrix
-     * @param int $k
-     */
+    
     public function kthSmallestQueue(array $matrix, int $k)
     {
         $n = count($matrix);

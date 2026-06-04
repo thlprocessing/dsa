@@ -44,6 +44,18 @@ class KthSmallestElementInSortedMatrix extends SplMaxHeap {
     }
 
 
+    /**
+     *   # [[1,2],[1,3]     
+     *   # #######
+     *   # 1 2
+     *   # 1 3
+     *   # unsorted matrix
+     *   # 1 1 2 4
+     *   # -> sorted matrix when inserting
+     * @param Integer[][] $matrix
+     * @param Integer $k
+     * @return Integer
+     */
     function kthSmallestWrong(array $matrix, int $k){
 
         $n = count($matrix);
@@ -52,11 +64,8 @@ class KthSmallestElementInSortedMatrix extends SplMaxHeap {
             throw new InvalidArgumentException("Matrix size n must be positive.");
         }
 
-        // if ($k < 0 || $k >= $n * $n) {
-        //     throw new OutOfBoundsException("Index k is out of range for 0-based indexing.");
-        // }
 
-        // Calculate row and column (0-based)
+        // Calculate row and column
         $modCol = ($k % $n);
         $col    = $modCol > 0 ? $modCol - 1 : $modCol;
         
@@ -249,7 +258,15 @@ $solution = new KthSmallestElementInSortedMatrix();
 # 0: 1   5  9
 # 1: 10 11 13   
 # 2: 12 13 15
-echo $solution->binarySearchMaxtrix([[1,5,9],[10,11,13],[12,13,15]], 1) . "\n";
+# echo $solution->binarySearchMaxtrix([[1,5,9],[10,11,13],[12,13,15]], 1) . "\n";
+
+
+#$result =  $solution->kthSmallestHeap([[1,5,9],[10,11,13],[12,13,15]], 8);
+#var_dump($result);
+
+
+$result =  $solution->kthSmallest([[1,5,9],[10,11,13],[12,13,15]], 8);
+var_dump($result);
 
 
 # 
